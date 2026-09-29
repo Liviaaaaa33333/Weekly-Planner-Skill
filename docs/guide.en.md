@@ -1,6 +1,6 @@
 # Weekly Planner: Complete User Guide
 
-[中文](guide.md) · [Back to README](../README.md)
+[中文](guide.md) · [Back to README](../README.md) · [GitHub project](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill)
 
 This guide covers everything from installation to troubleshooting. If you're new, work through chapters 1–6 and you'll be up and running. Come back to chapter 12 if something goes wrong.
 
@@ -68,7 +68,7 @@ Team or Enterprise plans: an organization admin first needs to allow skills in O
 
 ## 4. Install the skill
 
-1. Go to the `dist/` folder of the GitHub project and download `weekly-planner-for-everyone-en.zip` (English) or `weekly-planner-for-everyone-zh.zip` (Chinese). They do the same thing, so you only need one. **Don't unzip it.**
+1. Download [the English edition (weekly-planner-for-everyone-en.zip)](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill/raw/main/dist/weekly-planner-for-everyone-en.zip) or [the Chinese edition (weekly-planner-for-everyone-zh.zip)](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill/raw/main/dist/weekly-planner-for-everyone-zh.zip); the links download the file directly. You can also find them in the `dist/` folder of the [GitHub project](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill). They do the same thing, so you only need one. **Don't unzip it.**
 2. In claude.ai or the Claude desktop app, open **Settings → Capabilities** and make sure **Code execution and file creation** is on.
 3. Open **Customize → Skills**, click **+** → **Upload a skill**, and choose the zip you downloaded.
 4. Make sure `weekly-planner-for-everyone` is switched on in the list.

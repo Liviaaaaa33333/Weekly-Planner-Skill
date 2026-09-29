@@ -1,6 +1,6 @@
 # 週行程排程助理：完整使用教學
 
-[English](guide.en.md) · [回到 README](../README.md)
+[English](guide.en.md) · [回到 README](../README.md) · [GitHub 專案](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill)
 
 這份教學從安裝一路寫到疑難排解。第一次使用的話，照第 1–6 章做就能開始用；之後遇到問題再查第 12 章。
 
@@ -68,7 +68,7 @@ Team 或 Enterprise 方案：組織管理員要先在 Organization settings 允�
 
 ## 4. 安裝 skill
 
-1. 到 GitHub 專案的 `dist/` 資料夾，下載 `weekly-planner-for-everyone-zh.zip`（中文說明）或 `weekly-planner-for-everyone-en.zip`（英文說明）。兩個功能相同，裝一個就好。**下載後不要解壓縮。**
+1. 下載 [中文版安裝檔（weekly-planner-for-everyone-zh.zip）](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill/raw/main/dist/weekly-planner-for-everyone-zh.zip) 或 [英文版安裝檔（weekly-planner-for-everyone-en.zip）](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill/raw/main/dist/weekly-planner-for-everyone-en.zip)，點連結就會直接下載。也可以到 [GitHub 專案](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill) 的 `dist/` 資料夾找到它們。兩個功能相同，裝一個就好。**下載後不要解壓縮。**
 2. 在 claude.ai 或 Claude 桌面 App，打開 **Settings → Capabilities**，確認 **Code execution and file creation** 已開啟。
 3. 打開 **Customize → Skills**，點 **＋** → **Upload a skill**，選剛才的 zip。
 4. 確認清單裡的 `weekly-planner-for-everyone` 是開啟狀態。
