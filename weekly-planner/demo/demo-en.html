@@ -1,0 +1,650 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Weekly Planner Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F3F8FD;--surface:#FFFFFF;--sunk:#E4F0FA;--ink:#1B2733;--muted:#5F6F7E;--line:#D2E3F2;
+  --accent:#3A78AD;--accent-ink:#FFFFFF;--baby:#9ED3F5;--baby-ink:#0F2D45;--baby-soft:#EAF5FD;
+  --c-admin:#B3412E;--c-due:#A0660A;--c-read:#35598A;--c-appt:#7B4C7E;--c-class:#5B6662;--c-routine:#58793B;--c-focus:#2F6E73;
+  --serif:"Noto Serif TC","Songti TC",serif;--sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;--bg:#121A22;--surface:#1A2530;--sunk:#213040;--ink:#E4EDF5;--muted:#98A8B8;--line:#2E3F50;
+  --accent:#9ED3F5;--accent-ink:#0F2D45;--baby:#9ED3F5;--baby-ink:#0F2D45;--baby-soft:#1C2E3E;
+  --c-admin:#E4816D;--c-due:#DDA64A;--c-read:#8DB0E3;--c-appt:#C79BCB;--c-class:#A3AEA9;--c-routine:#A2C57F;--c-focus:#7CC2C6;}}
+:root[data-theme="dark"]{
+  color-scheme:dark;--bg:#121A22;--surface:#1A2530;--sunk:#213040;--ink:#E4EDF5;--muted:#98A8B8;--line:#2E3F50;
+  --accent:#9ED3F5;--accent-ink:#0F2D45;--baby:#9ED3F5;--baby-ink:#0F2D45;--baby-soft:#1C2E3E;
+  --c-admin:#E4816D;--c-due:#DDA64A;--c-read:#8DB0E3;--c-appt:#C79BCB;--c-class:#A3AEA9;--c-routine:#A2C57F;--c-focus:#7CC2C6;}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.6}
+.wrap{max-width:860px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:20px}
+h1{font-family:var(--serif);font-size:26px;margin:0;text-wrap:balance;letter-spacing:.02em}
+h2{font-family:var(--serif);font-size:18px;margin:0}
+.sub{color:var(--muted);font-size:13px}
+.mono,time{font-family:var(--mono);font-variant-numeric:tabular-nums}
+header{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.now{background:var(--baby-soft);border:1px solid var(--line);border-left:5px solid var(--baby);border-radius:10px;padding:16px;display:grid;gap:10px}
+.now .label{font-size:12px;letter-spacing:.08em;color:var(--muted)}
+.now .big{font-size:20px;font-weight:700}
+.now .row{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+nav{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line)}
+nav button{font:inherit;background:none;border:0;padding:8px 12px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+nav button[aria-selected="true"]{color:var(--ink);border-color:var(--baby);border-bottom-width:3px;font-weight:700}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.day{display:grid;gap:6px}
+.day h3{font-size:14px;margin:0;display:flex;gap:8px;align-items:baseline}
+.day h3 .d{font-family:var(--mono);color:var(--muted);font-weight:400}
+.day.today h3{color:var(--accent)}
+.day.today .items{border-color:var(--baby);box-shadow:0 0 0 1px var(--baby)}
+header h1{color:var(--accent)}
+.items{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.items li{display:grid;grid-template-columns:auto 92px 1fr;gap:10px;align-items:start;padding:9px 12px;border-top:1px solid var(--line)}
+.items li:first-child{border-top:0}
+.items li.done .t{text-decoration:line-through;color:var(--muted)}
+.items li.past:not(.done){opacity:.7}
+.items time{font-size:13px;color:var(--muted);padding-top:1px}
+.items .t{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}
+.items .note{flex-basis:100%;font-size:13px;color:var(--muted)}
+input[type=checkbox]{width:18px;height:18px;margin:3px 0 0;accent-color:var(--accent)}
+.chip{font-size:11px;padding:1px 7px;border-radius:99px;border:1px solid currentColor;white-space:nowrap;line-height:1.6}
+.k-admin{color:var(--c-admin)}.k-due{color:var(--c-due)}.k-read{color:var(--c-read)}.k-appt{color:var(--c-appt)}.k-class{color:var(--c-class)}.k-routine{color:var(--c-routine)}.k-focus{color:var(--c-focus)}.k-commute{color:var(--muted)}
+.list{display:grid;gap:8px}
+.dl{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start}
+.dl.done{opacity:.55}
+.dl .when{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.dl .left{font-family:var(--mono);font-size:13px;text-align:right;white-space:nowrap}
+.dl .left.hot{color:var(--c-admin);font-weight:500}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:4px;align-content:start}
+.card b{font-size:15px}
+.card .meta{font-size:13px;color:var(--muted)}
+.card .next{font-family:var(--mono);font-size:13px}
+form{display:grid;gap:8px;background:var(--sunk);border-radius:10px;padding:12px}
+form .row{display:flex;gap:8px;flex-wrap:wrap}
+input[type=text],input[type=date],input[type=time],select,textarea{font:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--ink);min-width:0}
+input[type=text],textarea{flex:1 1 220px}
+textarea{min-height:64px;resize:vertical}
+.btn{font:inherit;font-size:14px;border:0;border-radius:7px;padding:7px 14px;background:var(--baby);color:var(--baby-ink);cursor:pointer;font-weight:500}
+.btn:disabled{opacity:.5;cursor:default}
+.ghost{font:inherit;font-size:13px;background:none;border:1px solid var(--line);border-radius:7px;padding:3px 9px;color:var(--muted);cursor:pointer}
+table{border-collapse:collapse;width:100%;font-size:14px}
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+th,td{text-align:left;padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+th{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.04em;border-top:0}
+dl.settings{display:grid;grid-template-columns:minmax(110px,auto) 1fr;gap:6px 14px;margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+dl.settings dt{color:var(--muted);font-size:13px}
+dl.settings dd{margin:0}
+.empty{color:var(--muted);font-size:14px;padding:12px;background:var(--surface);border:1px dashed var(--line);border-radius:10px}
+.status{font-size:12px;color:var(--muted)}
+.pill{display:inline-block;font-size:12px;padding:2px 9px;border-radius:99px;background:var(--sunk);color:var(--muted)}
+.pill.ok{color:var(--baby-ink);background:var(--baby)}
+.legend{display:flex;flex-wrap:wrap;gap:6px}
+.fld{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted)}
+.fld input{min-width:130px}
+.upd{display:inline-block;font-size:11px;padding:0 7px;border-radius:99px;background:var(--baby);color:var(--baby-ink);margin-left:6px;white-space:nowrap;vertical-align:1px}
+.ann{font-size:13px;color:var(--ink);background:var(--baby-soft);border-radius:7px;padding:6px 9px;margin-top:4px}
+.ann .when{font-family:var(--mono);color:var(--muted);font-size:12px;margin-right:6px}
+tr.changed td{background:var(--baby-soft)}
+.schoolweek{display:inline-flex;align-items:baseline;gap:8px;margin-top:4px;font-size:14px;color:var(--baby-ink);background:var(--baby);border-radius:99px;padding:2px 12px;font-weight:500}
+.schoolweek .of{font-family:var(--mono);font-size:12px;opacity:.75}
+.schoolweek:empty{display:none}
+@media (max-width:520px){.items li{grid-template-columns:auto 1fr}.items time{grid-column:2}.items .t{grid-column:2}}
+@media (prefers-reduced-motion:no-preference){.items li{transition:opacity .2s}}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.del{font:inherit;font-size:12px;background:none;border:1px solid var(--line);border-radius:7px;padding:1px 8px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.del:hover{color:var(--c-admin);border-color:var(--c-admin)}
+.del.armed{color:#fff;background:var(--c-admin);border-color:var(--c-admin)}
+.langbtn{font:inherit;font-size:12px;background:var(--surface);border:1px solid var(--line);border-radius:99px;padding:2px 10px;color:var(--muted);cursor:pointer}
+.demo{font-size:12px;color:var(--baby-ink);background:var(--baby);border-radius:7px;padding:6px 10px}
+</style>
+
+<div class="wrap">
+  <div class="demo" id="demoBar" hidden></div>
+  <header>
+    <div>
+      <h1 id="title" data-i18n="thisWeek">本週行程</h1>
+      <div class="schoolweek" id="schoolWeek"></div>
+      <div class="sub" id="weekRange" data-i18n="loading">載入中…</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="langbtn" id="langBtn" type="button" hidden>EN</button>
+      <span class="pill" id="planStatus">—</span>
+    </div>
+  </header>
+
+  <section class="now" aria-live="polite">
+    <div class="label"><span data-i18n="rightNow">現在該做</span><span data-i18n="lp">（</span><span id="tzLabel">—</span> <span id="clock" class="mono"></span><span data-i18n="rp">）</span></div>
+    <div id="nowBody" class="sub" data-i18n="loading">載入中…</div>
+  </section>
+
+  <nav role="tablist">
+    <button role="tab" data-tab="week" aria-selected="true" data-i18n="tabWeek">本週</button>
+    <button role="tab" data-tab="due" aria-selected="false" data-i18n="tabDue">截止日</button>
+    <button role="tab" data-tab="routine" aria-selected="false" data-i18n="tabRoutine">例行事項</button>
+    <button role="tab" data-tab="courses" aria-selected="false" data-i18n="tabCourses">課堂訊息</button>
+    <button role="tab" data-tab="inbox" aria-selected="false" data-i18n="tabInbox">告訴 Claude</button>
+    <button role="tab" data-tab="settings" aria-selected="false" data-i18n="tabSettings">規則</button>
+  </nav>
+
+  <section data-panel="week">
+    <div class="legend" id="legend" style="margin-bottom:12px"></div>
+    <div id="weekBody" class="list"></div>
+  </section>
+
+  <section data-panel="due" hidden>
+    <form id="dueForm" style="margin-bottom:14px">
+      <b data-i18n="dueFormTitle">新增截止日或待辦</b>
+      <div class="row">
+        <input type="text" id="dueTitle" data-i18n-ph="duePh" placeholder="例如：期中報告、繳學費" required>
+      </div>
+      <div class="row">
+        <label class="fld"><span data-i18n="date">日期</span><input type="date" id="dueDate" required></label>
+        <label class="fld"><span data-i18n="timeOpt">時間（可不填）</span><input type="time" id="dueTime"></label>
+        <select id="dueCat">
+          <option value="admin" data-i18n="cat_admin">行政</option><option value="due" selected data-i18n="cat_due">作業／報告</option><option value="exam" data-i18n="cat_exam">考試</option><option value="appt" data-i18n="cat_appt">預約</option><option value="routine" data-i18n="cat_routine">小事</option>
+        </select>
+        <button class="btn" type="submit" data-i18n="add">加入</button>
+      </div>
+      <div class="status" id="dueMsg" data-i18n="dueHint">加入後，Claude 下次排程時會自動安排準備時間。</div>
+    </form>
+    <div id="dueBody" class="list"></div>
+  </section>
+
+  <section data-panel="routine" hidden><div id="routineBody" class="grid2"></div></section>
+
+  <section data-panel="courses" hidden><div id="coursesBody" class="list"></div></section>
+
+  <section data-panel="inbox" hidden>
+    <form id="inboxForm">
+      <b data-i18n="inboxTitle">有變動就寫在這裡</b>
+      <div class="sub" id="inboxHint"></div>
+      <textarea id="inboxText" required></textarea>
+      <div class="row"><button class="btn" type="submit" data-i18n="send">送出</button><span class="status" id="inboxMsg"></span></div>
+    </form>
+    <div id="inboxBody" class="list" style="margin-top:14px"></div>
+  </section>
+
+  <section data-panel="settings" hidden><div id="settingsBody"></div></section>
+
+  <div class="status" id="conn"></div>
+</div>
+
+<script>const DEMO_LANG="en";
+window.PLANNER_DEMO = ({day, today}) => {
+  const zh = DEMO_LANG === "zh";
+  const T = (a, b) => zh ? a : b;
+  const settings = {
+    ownerName: T("小安","Alex"), pageTitle: T("小安的週行程（範例）","Alex's week (demo)"),
+    language: DEMO_LANG, timezone: "Asia/Taipei", tzOffsetHours: 8, tzLabel: T("台北時間","Taipei time"),
+    role: "student", inboxChecks: ["08:00"],
+    semesterStart: day(-21), semesterWeeks: 18, midtermWeeks: [9], finalWeeks: [18],
+    rows: [
+      [T("身分","Role"), T("大學生，住家裡，搭捷運到學校約 40 分鐘","University student, 40 min by metro to campus")],
+      [T("可排時間","Planning hours"), "09:00–22:30"],
+      [T("最能專心","Best focus"), T("上午","Mornings")],
+      [T("專注時段","Focus blocks"), T("每天最多 3 段，每段 25–50 分，中間休息 20 分","Up to 3 a day, 25–50 min each, 20 min rest between")],
+      [T("優先順序","Priorities"), T("行政 > 截止 > 課前閱讀 > 預約 > 小事","Admin > deadlines > readings > appointments > errands")],
+      [T("提醒","Reminders"), T("工作前 10 分；預約前一天與 1 小時","10 min before work blocks; appointments 1 day and 1 hour before")],
+      [T("每週確認","Weekly check-in"), T("週日 20:00","Sunday 20:00")],
+    ]
+  };
+  const it = (d, s, e, title, kind, extra={}) => ({date: day(d), start: s, end: e, title, kind, done: false, ...extra});
+  const items = [
+    it(0,"08:20","09:00",T("通勤到學校","Commute to campus"),"commute"),
+    it(0,"09:10","12:00",T("統計學","Statistics"),"class"),
+    it(0,"13:30","13:45",T("填獎學金申請表","Fill in scholarship form"),"admin",{done:true, dls:["d1"]}),
+    it(0,"14:00","14:50",T("國關導論課前閱讀：第 4 章前半","IR reading: ch. 4, first half"),"read",{done:true}),
+    it(0,"15:10","16:00",T("國關導論課前閱讀：第 4 章後半","IR reading: ch. 4, second half"),"read",{done:true}),
+    it(1,"09:30","10:20",T("期中報告：找文獻","Midterm paper: find sources"),"focus",{note:T("先列 5 篇就好","5 papers is enough")}),
+    it(1,"10:40","11:30",T("期中報告：寫大綱","Midterm paper: outline"),"focus"),
+    it(1,"14:00","16:00",T("牙醫回診","Dentist"),"appt",{note:T("帶健保卡","Bring your insurance card")}),
+    it(1,"19:00","19:50",T("線上英文課","Online English class"),"class"),
+    it(2,"08:20","09:00",T("通勤到學校","Commute to campus"),"commute"),
+    it(2,"09:10","12:00",T("國際關係導論","Intro to International Relations"),"class"),
+    it(2,"13:30","14:20",T("統計作業 3","Statistics homework 3"),"due",{dls:["d2"]}),
+    it(2,"20:00","20:15",T("預約剪頭髮","Book a haircut"),"routine"),
+    it(3,"09:30","10:20",T("期中報告：寫前言","Midterm paper: introduction"),"focus"),
+    it(3,"13:00","13:50",T("學術英文寫作課前閱讀","Academic Writing reading"),"read"),
+    it(3,"16:00","16:15",T("領本月咖啡優惠券","Claim this month's coffee coupon"),"routine"),
+    it(4,"08:20","09:00",T("通勤到學校","Commute to campus"),"commute"),
+    it(4,"10:10","12:00",T("學術英文寫作","Academic Writing"),"class"),
+    it(4,"14:00","14:50",T("期中報告：第一節","Midterm paper: section 1"),"focus"),
+    it(5,"10:00","10:50",T("期中報告：第二節","Midterm paper: section 2"),"focus"),
+    it(5,"15:00","16:00",T("健身","Gym"),"routine"),
+    it(6,"10:00","10:50",T("統計學課前預習：第 5 章","Statistics preview: ch. 5"),"read"),
+    it(6,"20:00","20:20",T("每週確認下週行程","Weekly check-in with Claude"),"admin"),
+  ];
+  // 今天的前兩個可勾選項目在過去就標完成，看起來比較真實
+  return {
+    settings,
+    weeks: [{_id: day(0), weekStart: day(0), weekEnd: day(6), label: T("本週行程","This week"), status: "synced", items}],
+    deadlines: [
+      {_id:"d1", title:T("填獎學金申請表","Fill in scholarship form"), date:day(2), time:"17:00", cat:"admin", done:true, note:""},
+      {_id:"d2", title:T("統計作業 3","Statistics homework 3"), date:day(4), time:"23:59", cat:"due", done:false, note:T("線上繳交","Submit online")},
+      {_id:"d3", title:T("國關導論期中報告","IR midterm paper"), date:day(15), time:"", cat:"due", done:false, note:T("3000 字","3,000 words")},
+      {_id:"d4", title:T("統計學期中考","Statistics midterm"), date:day(37), time:"09:10", cat:"exam", done:false, note:""},
+      {_id:"d5", title:T("交換學生申請截止","Exchange program application"), date:day(11), time:"12:00", cat:"admin", done:false, note:T("要成績單與推薦信","Transcript and recommendation letter")},
+    ],
+    recurring: [
+      {_id:"r1", name:T("線上英文課","Online English class"), rule:T("每週 2 次，時間不固定","Twice a week, times vary"), duration:T("50 分","50 min"), order:1},
+      {_id:"r2", name:T("剪頭髮","Haircut"), rule:T("每 6 週，週末","Every 6 weeks, weekends"), duration:T("1 小時","1 hour"), next:day(12), note:T("提前一週提醒預約","Reminder to book one week before"), order:2},
+      {_id:"r3", name:T("咖啡優惠券","Coffee coupon"), rule:T("每月 1–6 日","1st–6th of each month"), duration:T("5 分","5 min"), order:3},
+      {_id:"r4", name:T("健身","Gym"), rule:T("每週 2 次","Twice a week"), duration:T("1 小時","1 hour"), order:4},
+    ],
+    courses: [
+      {_id:"c1", name:T("統計學","Statistics"), teacher:T("林老師","Prof. Lin"), room:"B201", day:1, start:"09:10", end:"12:00", rule:"",
+        schedule:[{date:day(0),text:T("第 4 章 抽樣分配","Ch. 4 Sampling distributions")},{date:day(7),text:T("第 5 章 信賴區間","Ch. 5 Confidence intervals")},{date:day(14),text:T("第 6 章 假設檢定","Ch. 6 Hypothesis testing")}]},
+      {_id:"c2", name:T("國際關係導論","Intro to International Relations"), teacher:T("陳老師","Prof. Chen"), room:"S310", day:3, start:"09:10", end:"12:00", rule:T("缺課 3 次扣學期成績","3 absences lower the final grade"),
+        lastAnnounce:{date:day(-1), text:T("下週改上第 5 章，第 4 章自己讀","Next week moves to ch. 5; read ch. 4 on your own")},
+        schedule:[{date:day(2),text:T("第 5 章 權力平衡","Ch. 5 Balance of power"),updated:day(-1),announce:T("老師調整進度","Schedule changed by the teacher")},{date:day(9),text:T("第 6 章 國際制度","Ch. 6 International institutions")}]},
+      {_id:"c3", name:T("學術英文寫作","Academic Writing"), teacher:T("王老師","Prof. Wang"), room:"L105", day:5, start:"10:10", end:"12:00", rule:"",
+        schedule:[{date:day(4),text:T("Paraphrasing 練習","Paraphrasing practice")},{date:day(11),text:T("文獻回顧寫法","Writing a literature review")}]},
+    ],
+    inbox: [
+      {_id:"i1", text:T("國關老師說下週改上第 5 章","IR teacher says next week is chapter 5"), at:new Date(Date.now()-86400000).toISOString(), handled:true},
+      {_id:"i2", text:T("週五想去看電影，晚上不要排事","I'm going to a movie Friday night, keep the evening free"), at:new Date(Date.now()-3600000).toISOString(), handled:false},
+    ]
+  };
+};
+</script>
+<script>
+const $ = s => document.querySelector(s);
+
+// ---------- 介面文字（zh / en），依 settings.language 切換 ----------
+const I18N = {
+  zh:{
+    thisWeek:"本週行程", loading:"載入中…", rightNow:"現在該做", lp:"（", rp:"）", localTime:"當地時間",
+    tabWeek:"本週", tabDue:"截止日", tabRoutine:"例行事項", tabCourses:"課堂訊息", tabInbox:"告訴 Claude", tabSettings:"規則",
+    dueFormTitle:"新增截止日或待辦", duePh:"例如：期中報告、繳學費", date:"日期", timeOpt:"時間（可不填）",
+    cat_admin:"行政", cat_due:"作業／報告", cat_exam:"考試", cat_appt:"預約", cat_routine:"小事",
+    add:"加入", dueHint:"加入後，Claude 下次排程時會自動安排準備時間。",
+    inboxTitle:"有變動就寫在這裡", send:"送出",
+    inboxHint:t=>`例如「週四的課改到 21:00」「下週牙醫改期到週五」「新作業：讀書心得 10/21 交」「老師說下週改上第五章」「以後每週運動三次」。Claude 每天 ${t} 會檢查，有新留言就直接排進行程和日曆，並傳訊息告訴你改了什麼。`,
+    fixedTimes:"固定時間", listSep:"、",
+    kind:{admin:"行政",due:"截止",exam:"考試",read:"閱讀",focus:"專注",appt:"預約",class:"上課",routine:"小事",commute:"通勤"},
+    wd:["日","一","二","三","四","五","六"],
+    md:(m,d,w)=>`${m}/${d}（${w}）`, dayHead:w=>"週"+w, clock:(m,d,w,hm)=>`${m}/${d} 週${w} ${hm}`,
+    semNotStarted:"學期尚未開始", semEnded:"學期已結束", midterm:"・期中週", finals:"・期末週",
+    semWeek:(n,tag)=>`今天是學期第 ${n} 週${tag}`,
+    noWeekNow:"還沒有排好的週行程。", free:"現在是空檔，可以休息。", upNext:"接下來", until:t=>"到 "+t, today:"今天",
+    noWeek:"還沒有週行程。每週確認時，Claude 會把下週草稿放進來。",
+    st:{draft:"草稿，待你確認",confirmed:"已確認",synced:"已寫入日曆"},
+    doneLabel:"完成：", saveFail:"沒有存到，請再試一次。",
+    dlSyncFail:"截止日沒有同步到，請到截止日分頁再勾一次。", wkSyncFail:"本週行程沒有同步到，請到本週分頁再勾一次。",
+    noDue:"目前沒有截止日。", done:"完成", past:"已過", daysLeft:n=>n+" 天",
+    noRoutine:"還沒有例行事項。", each:x=>"每次約 "+x, next:x=>"下次 "+x,
+    noCourses:"還沒有課表。",
+    coursesIntro:"老師公告的進度變動（改章節、停課、補課、考試或繳交日期），寫在「告訴 Claude」，Claude 會更新這裡並調整已排好的課前閱讀。",
+    thTime:"時間", thCourse:"課程", thRoom:"教室／老師", thNext:"下次上課",
+    announced:"老師公告", updated:d=>d+" 更新", hasUpdate:"有更新", fullSched:"・全學期進度",
+    handled:"已排入", pending:"待處理", noSettings:"尚未設定。",
+    added:"已加入。", full:"資料已滿，請刪掉一些舊項目。", inboxOk:"收到，下一次檢查時會排進行程。",
+    connLost:"資料連線中斷，重新整理頁面即可。", noView:"這個檢視無法讀取資料，請在 claude.ai 開啟。",
+    demo:"範例頁面：以下都是虛構資料，勾選、刪除和送出只會暫存在這個畫面。",
+    del:"刪除", delConfirm:"確定刪除？", delFail:"沒有刪掉，請再試一次。"
+  },
+  en:{
+    thisWeek:"This week", loading:"Loading…", rightNow:"Right now", lp:" (", rp:")", localTime:"local time",
+    tabWeek:"This week", tabDue:"Deadlines", tabRoutine:"Routines", tabCourses:"Classes", tabInbox:"Tell Claude", tabSettings:"Rules",
+    dueFormTitle:"Add a deadline or to-do", duePh:"e.g. Midterm paper, pay tuition", date:"Date", timeOpt:"Time (optional)",
+    cat_admin:"Admin", cat_due:"Assignment", cat_exam:"Exam", cat_appt:"Appointment", cat_routine:"Errand",
+    add:"Add", dueHint:"Claude will schedule prep time the next time it plans.",
+    inboxTitle:"Write any changes here", send:"Send",
+    inboxHint:t=>`For example: "Thursday's class moved to 21:00", "Dentist moved to Friday next week", "New assignment: book report due 10/21", "Next week we're on chapter 5", "Work out three times a week from now on". Claude checks every day at ${t}, adds new notes straight into your plan and calendar, and messages you what changed.`,
+    fixedTimes:"its scheduled times", listSep:", ",
+    kind:{admin:"Admin",due:"Due",exam:"Exam",read:"Reading",focus:"Focus",appt:"Appointment",class:"Class",routine:"Errand",commute:"Commute"},
+    wd:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],
+    md:(m,d,w)=>`${w} ${m}/${d}`, dayHead:w=>w, clock:(m,d,w,hm)=>`${w} ${m}/${d} ${hm}`,
+    semNotStarted:"Semester hasn't started", semEnded:"Semester is over", midterm:" · Midterm week", finals:" · Finals week",
+    semWeek:(n,tag)=>`Semester week ${n}${tag}`,
+    noWeekNow:"No weekly plan yet.", free:"Nothing scheduled right now. Take a break.", upNext:"Up next", until:t=>"until "+t, today:"Today",
+    noWeek:"No plan yet. Claude will put next week's draft here at your weekly check-in.",
+    st:{draft:"Draft, waiting for you",confirmed:"Confirmed",synced:"In your calendar"},
+    doneLabel:"Done: ", saveFail:"Didn't save. Please try again.",
+    dlSyncFail:"Couldn't update the deadline. Tick it again in Deadlines.", wkSyncFail:"Couldn't update this week's plan. Tick it again in This week.",
+    noDue:"No deadlines yet.", done:"Done", past:"Past", daysLeft:n=>n===1?"1 day":n+" days",
+    noRoutine:"No routines yet.", each:x=>"About "+x+" each time", next:x=>"Next: "+x,
+    noCourses:"No classes yet.",
+    coursesIntro:"When a teacher changes the schedule (new chapter, cancelled or make-up class, new exam or due date), write it in Tell Claude. Claude updates this tab and your planned readings.",
+    thTime:"Time", thCourse:"Class", thRoom:"Room / Teacher", thNext:"Next class",
+    announced:"Announcement", updated:d=>"Updated "+d, hasUpdate:"Updated", fullSched:"· full schedule",
+    handled:"Scheduled", pending:"Pending", noSettings:"Not set up yet.",
+    added:"Added.", full:"Storage is full. Please delete some old items.", inboxOk:"Got it. Claude will add it at the next check.",
+    connLost:"Lost connection to your data. Reload the page.", noView:"This view can't load your data. Open it on claude.ai.",
+    demo:"Demo page: everything below is made up. Ticks, deletions and notes only stay on this screen.",
+    del:"Delete", delConfirm:"Delete?", delFail:"Couldn't delete. Please try again."
+  }
+};
+let langOverride = null;
+function lang(){ if(langOverride) return langOverride; const l=String((state.settings&&state.settings.language)||"zh").toLowerCase(); return l.startsWith("en")?"en":"zh"; }
+function L(){ return I18N[lang()]; }
+function applyI18n(){
+  const t=L();
+  document.documentElement.lang = lang()==="en" ? "en" : "zh-Hant";
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ const v=t[el.dataset.i18n]; if(typeof v==="string") el.textContent=v; });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el=>{ el.placeholder=t[el.dataset.i18nPh]; });
+  $("#legend").innerHTML=["admin","due","read","focus","appt","class","routine"].map(k=>`<span class="chip k-${k}">${t.kind[k]}</span>`).join("");
+  $("#langBtn").textContent = lang()==="en" ? "中文" : "EN";
+}
+
+const state = {settings:null, weeks:[], deadlines:[], recurring:[], courses:[], inbox:[]};
+let db = null;
+
+// ---------- 時間：一律用 settings.timezone（IANA，例如 Asia/Taipei），自動處理夏令時間 ----------
+// tp() 回傳一個 Date，它的 getUTC* 欄位就是「使用者時區的當地時間」。之後只讀 getUTC*。
+// 時區名稱無效或瀏覽器不支援時，退回 settings.tzOffsetHours（預設 +8）。
+let _fmt=null, _fmtTz=null;
+function tzFormatter(){
+  const tz = state.settings && state.settings.timezone;
+  if(!tz) return null;
+  if(_fmtTz===tz) return _fmt;
+  _fmtTz=tz;
+  try{ _fmt=new Intl.DateTimeFormat("en-US",{timeZone:tz,hourCycle:"h23",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit"}); }
+  catch(e){ _fmt=null; }
+  return _fmt;
+}
+function tp(ms){
+  ms = ms ?? Date.now();
+  const f=tzFormatter();
+  if(f){
+    const p={}; f.formatToParts(new Date(ms)).forEach(x=>p[x.type]=x.value);
+    return new Date(Date.UTC(+p.year, +p.month-1, +p.day, +p.hour%24, +p.minute, +p.second));
+  }
+  const h=state.settings&&typeof state.settings.tzOffsetHours==="number"?state.settings.tzOffsetHours:8;
+  return new Date(ms + h*3600000);
+}
+function esc(s){return String(s ?? "").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function pad(n){return String(n).padStart(2,"0");}
+function ymd(d){return d.getUTCFullYear()+"-"+pad(d.getUTCMonth()+1)+"-"+pad(d.getUTCDate());}
+function todayStr(){return ymd(tp());}
+function nowMin(){const n=tp();return n.getUTCHours()*60+n.getUTCMinutes();}
+function parseDate(s){const [y,m,d]=s.split("-").map(Number);return new Date(Date.UTC(y,m-1,d));}
+function md(s){const d=parseDate(s);return L().md(d.getUTCMonth()+1,d.getUTCDate(),L().wd[d.getUTCDay()]);}
+function mdShort(s){if(!s)return "";const d=parseDate(s);return (d.getUTCMonth()+1)+"/"+d.getUTCDate();}
+function daysUntil(s){return Math.round((parseDate(s)-parseDate(todayStr()))/86400000);}
+function toMin(t){if(!t)return null;const [h,m]=t.split(":").map(Number);return h*60+m;}
+function fmtAt(iso){if(!iso)return "";const t=Date.parse(iso);if(isNaN(t))return "";const d=tp(t);return (d.getUTCMonth()+1)+"/"+d.getUTCDate()+" "+pad(d.getUTCHours())+":"+pad(d.getUTCMinutes());}
+
+// 學期週次：從 settings.semesterStart 起算，每 7 天換一週；沒設定學期就不顯示
+function schoolWeek(){
+  const s=state.settings||{};
+  if(!s.semesterStart) return null;
+  const total=s.semesterWeeks||18;
+  const n=Math.floor((parseDate(todayStr())-parseDate(s.semesterStart))/86400000/7)+1;
+  return {n,total,mid:s.midtermWeeks||[],fin:s.finalWeeks||[]};
+}
+function renderSchoolWeek(){
+  const sw=schoolWeek(); const el=$("#schoolWeek"); const t=L();
+  if(!sw){el.innerHTML="";return;}
+  const {n,total,mid,fin}=sw;
+  if(n<1){el.textContent=t.semNotStarted;return;}
+  if(n>total){el.textContent=t.semEnded;return;}
+  const tag = mid.includes(n)?t.midterm:fin.includes(n)?t.finals:"";
+  el.innerHTML=`${esc(t.semWeek(n,tag))}<span class="of">${n}/${total}</span>`;
+}
+function renderMeta(){
+  const s=state.settings||{}; const t=L();
+  applyI18n();
+  $("#tzLabel").textContent=s.tzLabel||s.timezone||t.localTime;
+  const times=(s.inboxChecks&&s.inboxChecks.length)?s.inboxChecks.join(t.listSep):t.fixedTimes;
+  $("#inboxHint").textContent=t.inboxHint(times);
+  if(s.pageTitle) document.title=s.pageTitle;
+}
+function renderClock(){renderSchoolWeek();const n=tp();const t=L();$("#clock").textContent=t.clock(n.getUTCMonth()+1,n.getUTCDate(),t.wd[n.getUTCDay()],pad(n.getUTCHours())+":"+pad(n.getUTCMinutes()));}
+
+// tabs
+function showTab(name){
+  document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected", String(b.dataset.tab===name)));
+  document.querySelectorAll("[data-panel]").forEach(p=>p.hidden = p.dataset.panel!==name);
+  try{localStorage.setItem("tab",name);}catch(e){}
+}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+try{const t=localStorage.getItem("tab"); if(t) showTab(t);}catch(e){}
+
+function currentWeek(){
+  const today=todayStr();
+  const sorted=[...state.weeks].sort((a,b)=>a.weekStart<b.weekStart?-1:1);
+  let pick=null;
+  for(const w of sorted){ if(w.weekStart<=today) pick=w; }
+  const cur = pick && (!pick.weekEnd || pick.weekEnd>=today) ? pick : null;
+  return cur || sorted.find(w=>w.weekStart>today) || pick;
+}
+
+function renderNow(){
+  renderClock();
+  const w=currentWeek(); const el=$("#nowBody"); const t=L();
+  if(!w){el.innerHTML=`<span class="sub">${esc(t.noWeekNow)}</span>`;return;}
+  const today=todayStr(); const nm=nowMin();
+  const items=(w.items||[]).map((it,i)=>({...it,_i:i}));
+  const upcoming=items.filter(it=>!it.done && (it.date>today || (it.date===today && (toMin(it.end)??toMin(it.start))>nm)))
+    .sort((a,b)=>(a.date+a.start)<(b.date+b.start)?-1:1);
+  const cur=upcoming.find(it=>it.date===today && toMin(it.start)<=nm);
+  const next=upcoming.filter(it=>it!==cur).slice(0,2);
+  let h="";
+  if(cur){h+=`<div class="row"><span class="big">${esc(cur.title)}</span><span class="chip k-${esc(cur.kind)}">${esc(t.kind[cur.kind]||"")}</span></div><div class="sub mono">${esc(t.until(cur.end||""))}${cur.note?" ・ "+esc(cur.note):""}</div>`;}
+  else h+=`<div class="sub">${esc(t.free)}</div>`;
+  if(next.length){h+=`<div class="sub">${esc(t.upNext)}</div>`+next.map(it=>`<div class="row"><span class="mono">${it.date===today?esc(t.today):md(it.date)} ${esc(it.start)}</span><span>${esc(it.title)}</span></div>`).join("");}
+  el.innerHTML=h;
+}
+
+function renderWeek(){
+  const w=currentWeek(); const el=$("#weekBody"); const t=L();
+  if(!w){el.innerHTML=`<div class="empty">${esc(t.noWeek)}</div>`;$("#weekRange").textContent="";$("#planStatus").textContent="—";return;}
+  $("#title").textContent = w.label || t.thisWeek;
+  $("#weekRange").textContent = md(w.weekStart)+" – "+md(w.weekEnd||w.weekStart);
+  $("#planStatus").textContent=t.st[w.status]||w.status||""; $("#planStatus").className="pill"+(w.status==="synced"?" ok":"");
+  const today=todayStr(); const nm=nowMin();
+  const byDay={};
+  (w.items||[]).forEach((it,i)=>{(byDay[it.date] ||= []).push({...it,_i:i});});
+  // 今天放最上面，接著是之後的日子，已經過去的日子移到最下面
+  const days=Object.keys(byDay).sort();
+  const ordered=[...days.filter(d=>d===today),...days.filter(d=>d>today),...days.filter(d=>d<today)];
+  el.innerHTML=ordered.map(d=>{
+    const list=byDay[d].sort((a,b)=>a.start<b.start?-1:1);
+    const dd=parseDate(d);
+    return `<div class="day${d===today?" today":""}"><h3>${esc(t.dayHead(t.wd[dd.getUTCDay()]))}<span class="d">${dd.getUTCMonth()+1}/${dd.getUTCDate()}</span>${d===today?`<span class="chip k-focus">${esc(t.today)}</span>`:""}</h3><ul class="items">`+
+      list.map(it=>{
+        const past = d<today || (d===today && (toMin(it.end)??toMin(it.start))<=nm);
+        const checkable = !["class","commute"].includes(it.kind);
+        return `<li class="${it.done?"done":""} ${past?"past":""}">${checkable?`<input type="checkbox" id="chk-${esc(w._id)}-${it._i}" data-i="${it._i}" ${it.done?"checked":""} aria-label="${esc(t.doneLabel+it.title)}">`:"<span></span>"}<time>${esc(it.start)}${it.end?"–"+esc(it.end):""}</time><div class="t"><span>${esc(it.title)}</span><span class="chip k-${esc(it.kind)}">${esc(t.kind[it.kind]||it.kind)}</span>${it.note?`<span class="note">${esc(it.note)}</span>`:""}</div></li>`;
+      }).join("")+`</ul></div>`;
+  }).join("");
+  el.querySelectorAll("input[type=checkbox]").forEach(cb=>cb.addEventListener("change",async()=>{
+    const items=(w.items||[]).map(x=>({...x})); const it=items[+cb.dataset.i]; it.done=cb.checked;
+    try{ await db.doc("weeks/"+w._id).update({items}); }catch(e){ cb.checked=!cb.checked; $("#conn").textContent=L().saveFail; return; }
+    await syncDeadlines(linkedDeadlines(it), cb.checked);
+  }));
+}
+
+// 本週與截止日的完成狀態互相同步：週行程項目用 dls 連到截止日；沒有連結時，標題完全相同也算
+function normT(t){return String(t||"").replace(/^[🔴✅🚗☕\s]+/u,"").replace(/\s+/g,"");}
+function linkedDeadlines(it){
+  const ids=new Set(it.dls||[]);
+  state.deadlines.forEach(d=>{ if(normT(d.title)===normT(it.title)) ids.add(d._id); });
+  return [...ids];
+}
+async function syncDeadlines(ids, done){
+  for(const id of ids){
+    const d=state.deadlines.find(x=>x._id===id);
+    if(!d || !!d.done===done) continue;
+    try{ await db.doc("deadlines/"+id).update({done}); }catch(e){ $("#conn").textContent=L().dlSyncFail; }
+  }
+}
+async function syncWeekItems(id, done){
+  const d=state.deadlines.find(x=>x._id===id);
+  for(const w of state.weeks){
+    let changed=false;
+    const items=(w.items||[]).map(x=>{
+      const y={...x};
+      const hit=(y.dls||[]).includes(id) || (d && normT(d.title)===normT(y.title));
+      if(hit && !!y.done!==done){
+        // 一個項目連到多個截止日時，取消勾選任一個就取消；全部完成才打勾
+        if(done && (y.dls||[]).length>1 && !(y.dls).every(k=>k===id || (state.deadlines.find(z=>z._id===k)||{}).done)) return y;
+        y.done=done; changed=true;
+      }
+      return y;
+    });
+    if(changed){ try{ await db.doc("weeks/"+w._id).update({items}); }catch(e){ $("#conn").textContent=L().wkSyncFail; } }
+  }
+}
+
+// 刪除：按一次變成「確定刪除？」，4 秒內再按一次才真的刪，避免手機上誤觸。
+// 刪掉的文件直接從資料庫移除，頁面不留痕跡；只有還沒處理的留言可以刪。
+const armed=new Map();
+function delBtn(coll,id,title){
+  const key=coll+"/"+id; const on=armed.has(key); const t=L();
+  return `<button type="button" class="del${on?" armed":""}" data-del="${esc(key)}" aria-label="${esc((on?t.delConfirm:t.del)+" "+title)}">${esc(on?t.delConfirm:t.del)}</button>`;
+}
+function wireDel(el){
+  el.querySelectorAll("[data-del]").forEach(b=>b.addEventListener("click",async()=>{
+    const key=b.dataset.del;
+    if(!armed.has(key)){
+      armed.set(key,setTimeout(()=>{armed.delete(key);renderDue();renderInbox();},4000));
+      b.classList.add("armed"); b.textContent=L().delConfirm; return;
+    }
+    clearTimeout(armed.get(key)); armed.delete(key); b.disabled=true;
+    const [coll,id]=key.split("/");
+    try{
+      if(coll==="deadlines") await unlinkDeadline(id);
+      await db.doc(key).delete();
+    }catch(e){ b.disabled=false; $("#conn").textContent=L().delFail; }
+  }));
+}
+// 刪掉截止日時，也把週行程裡指向它的 dls 連結拿掉
+async function unlinkDeadline(id){
+  for(const w of state.weeks){
+    if(!(w.items||[]).some(x=>(x.dls||[]).includes(id))) continue;
+    const items=w.items.map(x=>{ if(!(x.dls||[]).includes(id)) return x; const y={...x}; y.dls=y.dls.filter(k=>k!==id); if(!y.dls.length) delete y.dls; return y; });
+    await db.doc("weeks/"+w._id).update({items});
+  }
+}
+
+function renderDue(){
+  const el=$("#dueBody"); const t=L();
+  const list=[...state.deadlines].sort((a,b)=>((a.done?1:0)-(b.done?1:0)) || (a.date+(a.time||"")<b.date+(b.time||"")?-1:1));
+  if(!list.length){el.innerHTML=`<div class="empty">${esc(t.noDue)}</div>`;return;}
+  el.innerHTML=list.map(d=>{
+    const n=daysUntil(d.date);
+    const left = d.done?t.done: n<0?t.past: n===0?t.today: t.daysLeft(n);
+    const hot = !d.done && n>=0 && (n<=7 || d.cat==="admin" && n<=14);
+    const k = d.cat==="exam"?"due":d.cat;
+    return `<div class="dl ${d.done?"done":""}"><input type="checkbox" id="dl-${esc(d._id)}" data-id="${esc(d._id)}" ${d.done?"checked":""} aria-label="${esc(t.doneLabel+d.title)}"><div><div style="display:flex;gap:6px;flex-wrap:wrap;align-items:baseline"><b style="font-weight:500">${esc(d.title)}</b><span class="chip k-${esc(k)}">${esc(t["cat_"+d.cat]||d.cat)}</span></div><div class="when">${md(d.date)}${d.time?" "+esc(d.time):""}</div>${d.note?`<div class="sub">${esc(d.note)}</div>`:""}</div><div class="side"><div class="left ${hot?"hot":""}">${esc(left)}</div>${delBtn("deadlines",d._id,d.title)}</div></div>`;
+  }).join("");
+  wireDel(el);
+  el.querySelectorAll("input[type=checkbox]").forEach(cb=>cb.addEventListener("change",async()=>{
+    try{ await db.doc("deadlines/"+cb.dataset.id).update({done:cb.checked}); }catch(e){ cb.checked=!cb.checked; $("#conn").textContent=L().saveFail; return; }
+    await syncWeekItems(cb.dataset.id, cb.checked);
+  }));
+}
+
+function renderRoutine(){
+  const el=$("#routineBody"); const t=L();
+  if(!state.recurring.length){el.innerHTML=`<div class="empty">${esc(t.noRoutine)}</div>`;return;}
+  el.innerHTML=[...state.recurring].sort((a,b)=>(a.order||0)-(b.order||0)).map(r=>`<div class="card"><b>${esc(r.name)}</b><div class="meta">${esc(r.rule)}</div>${r.duration?`<div class="meta">${esc(t.each(r.duration))}</div>`:""}${r.next?`<div class="next">${esc(t.next(r.next))}</div>`:""}${r.note?`<div class="meta">${esc(r.note)}</div>`:""}</div>`).join("");
+}
+
+function recent(s){return s && daysUntil(s)>=-14;}
+function renderCourses(){
+  const el=$("#coursesBody"); const t=L();
+  if(!state.courses.length){el.innerHTML=`<div class="empty">${esc(t.noCourses)}</div>`;return;}
+  const cs=[...state.courses].sort((a,b)=>(a.day-b.day)||(a.start<b.start?-1:1));
+  const today=todayStr();
+  el.innerHTML=`<div class="sub">${esc(t.coursesIntro)}</div><div class="tbl"><table><thead><tr><th>${esc(t.thTime)}</th><th>${esc(t.thCourse)}</th><th>${esc(t.thRoom)}</th><th>${esc(t.thNext)}</th></tr></thead><tbody>`+
+    cs.map(c=>{
+      const nx=(c.schedule||[]).filter(s=>s.date>=today).sort((a,b)=>a.date<b.date?-1:1)[0];
+      const la=c.lastAnnounce;
+      return `<tr><td class="mono">${esc(t.dayHead(t.wd[c.day]))}<br>${esc(c.start)}–${esc(c.end)}</td><td><b style="font-weight:500">${esc(c.name)}</b>${c.rule?`<div class="sub">${esc(c.rule)}</div>`:""}${la&&recent(la.date)?`<div class="ann"><span class="when">${esc(mdShort(la.date))} ${esc(t.announced)}</span>${esc(la.text)}</div>`:""}</td><td class="sub">${esc(c.room)}<br>${esc(c.teacher)}</td><td>${nx?`<span class="mono sub">${md(nx.date)}</span>${nx.updated?`<span class="upd">${esc(t.updated(mdShort(nx.updated)))}</span>`:""}<br>${esc(nx.text)}`:"<span class=\"sub\">—</span>"}</td></tr>`;
+    }).join("")+`</tbody></table></div>`+
+    cs.filter(c=>(c.schedule||[]).length).map(c=>`<details class="card"><summary><b style="font-weight:500">${esc(c.name)}</b> ${esc(t.fullSched)}${(c.schedule||[]).some(s=>recent(s.updated))?`<span class="upd">${esc(t.hasUpdate)}</span>`:""}</summary><div class="tbl" style="margin-top:8px;border:0"><table><tbody>`+
+      [...c.schedule].sort((a,b)=>a.date<b.date?-1:1).map(s=>`<tr class="${recent(s.updated)?"changed":""}"><td class="mono sub" style="white-space:nowrap">${md(s.date)}</td><td>${esc(s.text)}${s.updated?`<span class="upd">${esc(t.updated(mdShort(s.updated)))}</span>`:""}${s.announce?`<div class="sub">${esc(s.announce)}</div>`:""}</td></tr>`).join("")+`</tbody></table></div></details>`).join("");
+}
+
+function renderInbox(){
+  const el=$("#inboxBody"); const t=L();
+  const list=[...state.inbox].sort((a,b)=>(b.at||"")<(a.at||"")?-1:1);
+  el.innerHTML=list.map(n=>`<div class="dl ${n.handled?"done":""}" style="grid-template-columns:1fr auto"><div>${esc(n.text)}<div class="when">${esc(fmtAt(n.at))}</div></div><div class="side"><div class="left">${esc(n.handled?t.handled:t.pending)}</div>${n.handled?"":delBtn("inbox",n._id,n.text)}</div></div>`).join("");
+  wireDel(el);
+}
+
+function renderSettings(){
+  const s=state.settings; const el=$("#settingsBody");
+  if(!s){el.innerHTML=`<div class="empty">${esc(L().noSettings)}</div>`;return;}
+  el.innerHTML=`<dl class="settings">`+(s.rows||[]).map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join("")+`</dl>`;
+}
+
+function renderAll(){renderMeta();renderNow();renderWeek();renderDue();renderRoutine();renderCourses();renderInbox();renderSettings();}
+
+$("#dueForm").addEventListener("submit",async e=>{
+  e.preventDefault(); if(!db) return;
+  const title=$("#dueTitle").value.trim(); const date=$("#dueDate").value;
+  if(!title||!date) return;
+  const btn=e.submitter; btn.disabled=true;
+  try{
+    await db.collection("deadlines").add({title,date,time:$("#dueTime").value||"",cat:$("#dueCat").value,done:false,note:"",source:"page"});
+    $("#dueTitle").value="";$("#dueTime").value="";$("#dueMsg").textContent=L().added;
+  }catch(err){ $("#dueMsg").textContent = err && err.code==="quota_exceeded" ? L().full : L().saveFail; }
+  btn.disabled=false;
+});
+$("#inboxForm").addEventListener("submit",async e=>{
+  e.preventDefault(); if(!db) return;
+  const text=$("#inboxText").value.trim(); if(!text) return;
+  const btn=e.submitter; btn.disabled=true;
+  try{ await db.collection("inbox").add({text,at:new Date().toISOString(),handled:false}); $("#inboxText").value=""; $("#inboxMsg").textContent=L().inboxOk; }
+  catch(err){ $("#inboxMsg").textContent=L().saveFail; }
+  btn.disabled=false;
+});
+
+function sub(coll,key){
+  db.collection(coll).onSnapshot(snap=>{
+    state[key]=snap.docs.map(d=>({...d.data(),_id:d.id})); renderAll();
+  },err=>{$("#conn").textContent=L().connLost;});
+}
+
+// ---------- 範例模式：頁面裡定義了 window.PLANNER_DEMO 時，用記憶體裡的虛構資料 ----------
+function memDb(data){
+  const ls={};
+  const snap=c=>({docs:(data[c]||[]).map(d=>({id:d._id,data:()=>({...d})}))});
+  const fire=c=>(ls[c]||[]).forEach(f=>f(snap(c)));
+  return {
+    collection:c=>({
+      onSnapshot:(f)=>{(ls[c] ||= []).push(f); f(snap(c));},
+      add:async o=>{(data[c] ||= []).push({...o,_id:"d"+Date.now()}); fire(c);}
+    }),
+    doc:p=>{
+      const [c,id]=p.split("/");
+      if(c==="settings") return {onSnapshot:f=>f({exists:true,data:()=>data.settings})};
+      return {update:async patch=>{const d=(data[c]||[]).find(x=>x._id===id); if(d){Object.assign(d,patch); fire(c);}},
+              delete:async()=>{data[c]=(data[c]||[]).filter(x=>x._id!==id); fire(c);}};
+    }
+  };
+}
+function demoHelpers(){
+  // 以「今天」所在的週為準產生日期，範例頁面永遠看起來是當週
+  const t=parseDate(todayStr()); const mon=new Date(t); mon.setUTCDate(t.getUTCDate()-((t.getUTCDay()+6)%7));
+  const day=n=>{const d=new Date(mon); d.setUTCDate(mon.getUTCDate()+n); return ymd(d);};
+  return {day, today:todayStr()};
+}
+
+renderClock(); applyI18n();
+(async()=>{
+  if(typeof window.PLANNER_DEMO==="function"){
+    const data=window.PLANNER_DEMO(demoHelpers());
+    db=memDb(data);
+    $("#demoBar").hidden=false;
+    const lb=$("#langBtn"); lb.hidden=false;
+    lb.addEventListener("click",()=>{ langOverride = lang()==="en" ? "zh" : "en"; $("#demoBar").textContent=L().demo; renderAll(); });
+    db.doc("settings/main").onSnapshot(s=>{state.settings=s.data();});
+    $("#demoBar").textContent=L().demo;
+  } else {
+    const c = window.claude ? await window.claude.use("db").catch(()=>null) : null;
+    if(!c){ $("#nowBody").textContent=L().noView; $("#weekRange").textContent=""; document.querySelectorAll("form .btn").forEach(b=>b.disabled=true); return; }
+    db=c;
+    db.doc("settings/main").onSnapshot(s=>{state.settings=s.exists?s.data():null;renderAll();},()=>{});
+  }
+  sub("weeks","weeks"); sub("deadlines","deadlines"); sub("recurring","recurring"); sub("courses","courses"); sub("inbox","inbox");
+  setInterval(()=>{renderNow();renderWeek();},60000);
+})();
+</script>
+
+</body></html>
