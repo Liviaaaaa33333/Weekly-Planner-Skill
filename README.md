@@ -41,7 +41,7 @@
 
 ### 快速開始
 
-1. 下載 [`dist/weekly-planner-for-everyone-zh.zip`](dist/weekly-planner-for-everyone-zh.zip)（英文說明版是 [`-en.zip`](dist/weekly-planner-for-everyone-en.zip)，功能相同，裝一個就好），不要解壓縮。
+1. 下載 [中文版安裝檔 weekly-planner-for-everyone-zh.zip](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill/raw/main/dist/weekly-planner-for-everyone-zh.zip)（英文說明版是 [-en.zip](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill/raw/main/dist/weekly-planner-for-everyone-en.zip)，功能相同，裝一個就好），不要解壓縮。點連結就會直接下載。
 2. 在 Claude 打開 **Customize → Skills**，點 **＋** → **Upload a skill**，選這個 zip。
 3. （建議）在 **Customize → Connectors** 連接 Google Calendar。
 4. 開一個新對話，輸入「幫我設定週行程排程助理」。選「快速設定」大約 5 分鐘。
@@ -122,7 +122,7 @@ For why it's designed this way and which difficulty each feature addresses, see 
 
 ### Quick start
 
-1. Download [`dist/weekly-planner-for-everyone-en.zip`](dist/weekly-planner-for-everyone-en.zip) (the Chinese edition, [`-zh.zip`](dist/weekly-planner-for-everyone-zh.zip), has the same features; install one). Don't unzip it.
+1. Download [the English edition, weekly-planner-for-everyone-en.zip](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill/raw/main/dist/weekly-planner-for-everyone-en.zip) (the Chinese edition, [-zh.zip](https://github.com/Liviaaaaa33333/Weekly-Planner-Skill/raw/main/dist/weekly-planner-for-everyone-zh.zip), has the same features; install one). Don't unzip it. The link downloads the file directly.
 2. In Claude, open **Customize → Skills**, click **+** → **Upload a skill**, and choose the zip.
 3. (Recommended) Connect Google Calendar in **Customize → Connectors**.
 4. Start a new chat and say "set up my weekly planner". Quick setup takes about 5 minutes.
