@@ -1,0 +1,51 @@
+name: 建議或想法 Suggestion
+description: 想要新功能，或覺得哪裡可以更好用 · A feature idea or something that could work better
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        謝謝你的建議！我會看過再決定要不要、以及怎麼加進來。
+        **請不要貼上個人行程、頁面連結或任何個人資料。**
+
+        Thanks for the idea! I'll read it and decide whether and how to add it.
+        **Please don't paste your personal schedule, page link or any personal data.**
+
+  - type: dropdown
+    id: edition
+    attributes:
+      label: 語言版本 Edition
+      options:
+        - 中文版 Chinese
+        - 英文版 English
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 你遇到什麼困難？ What's the problem?
+      description: 例如「我常常……，但現在的頁面沒辦法……」。 · For example, "I often…, but the page can't…".
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: 你希望它怎麼做？ What would you like it to do?
+    validations:
+      required: true
+
+  - type: textarea
+    id: other
+    attributes:
+      label: 其他補充 Anything else
+      description: 參考的 App、示意圖等都可以（請先遮住個人行程）。 · Apps you have in mind, sketches, etc. (blur your schedule first).
+
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 隱私確認 Privacy check
+      options:
+        - label: 我確認這則建議沒有個人行程、頁面連結或個人資料。 · I confirm this contains no personal schedule, page link or personal data.
+          required: true

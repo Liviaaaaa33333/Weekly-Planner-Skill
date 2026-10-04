@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 使用說明 User guide (中文)
+    url: https://github.com/Liviaaaaa33333/Weekly-Planner-Skill/blob/main/docs/guide.md
+    about: 回報前可以先看看常見問題和疑難排解。
+  - name: User guide (English)
+    url: https://github.com/Liviaaaaa33333/Weekly-Planner-Skill/blob/main/docs/guide.en.md
+    about: Check the FAQ and troubleshooting before reporting.

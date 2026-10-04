@@ -1,0 +1,103 @@
+name: 問題回報 Bug report
+description: 排程、日曆、頁面或安裝出了問題 · Something isn't working (scheduling, calendar, page or setup)
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        謝謝你花時間回報！請盡量描述清楚，我會再處理與更新。
+        **請不要貼上個人行程、頁面連結或任何個人資料。** 截圖前請先遮住行程內容。
+
+        Thanks for taking the time to report this! Please describe it as clearly as you can and I'll take care of it.
+        **Please don't paste your personal schedule, page link or any personal data.** Blur your schedule before attaching screenshots.
+
+  - type: dropdown
+    id: edition
+    attributes:
+      label: 語言版本 Edition
+      options:
+        - 中文版 Chinese
+        - 英文版 English
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Skill 版本 Skill version
+      description: 可以在 README 開頭或 CHANGELOG 找到，例如 1.3.0；不確定可以留空。 · Shown at the top of the README or in the CHANGELOG, e.g. 1.3.0. Leave blank if unsure.
+      placeholder: "1.3.0"
+
+  - type: dropdown
+    id: plan
+    attributes:
+      label: Claude 方案 Claude plan
+      options:
+        - Pro
+        - Max
+        - Team
+        - Enterprise
+        - 不確定 Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 使用的平台 Platform
+      description: 可複選 · Select all that apply
+      multiple: true
+      options:
+        - 網頁 Web (claude.ai)
+        - 桌面 App Desktop app
+        - 手機 App Mobile app
+    validations:
+      required: true
+
+  - type: dropdown
+    id: calendar
+    attributes:
+      label: 有沒有連 Google 日曆？ Google Calendar connected?
+      options:
+        - 有 Yes
+        - 沒有 No
+        - 不確定 Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 發生了什麼事？ What happened?
+      description: 你做了什麼、看到了什麼。 · What you did and what you saw.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 你原本預期會怎樣？ What did you expect?
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 怎麼重現這個問題？ Steps to reproduce
+      description: 如果知道的話，一步一步寫下來。 · If you know, list the steps one by one.
+      placeholder: |
+        1.
+        2.
+        3.
+
+  - type: textarea
+    id: error
+    attributes:
+      label: 錯誤訊息或截圖 Error message or screenshot
+      description: 可以直接貼上文字或拖曳圖片進來（請先遮住個人行程）。 · Paste text or drag in an image (blur your schedule first).
+
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: 隱私確認 Privacy check
+      options:
+        - label: 我確認這則回報沒有個人行程、頁面連結或個人資料。 · I confirm this report contains no personal schedule, page link or personal data.
+          required: true
