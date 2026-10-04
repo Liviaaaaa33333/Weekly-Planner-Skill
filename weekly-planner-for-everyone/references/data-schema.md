@@ -15,7 +15,7 @@
 | `tzOffsetHours` | 數字 | 與 UTC 的時差，只在 `timezone` 無效時備用（8） |
 | `tzLabel` | 字串 | 頁面顯示的時區名稱，例如「台北時間」 |
 | `role` | 字串 | `student`／`worker`／`other`，決定要不要用課表與學期週次 |
-| `calendar` | 物件 | `{type: "google" | "none", calendarId}`；只支援 Google 日曆，`calendarId` 通常是使用者的 Google 帳號 email |
+| `calendar` | 物件 | `{type: "google" | "none", calendarId}`；只支援 Google 日曆，`calendarId` 通常是使用者的 Google 帳號 email；頁面「月曆」分頁是 `google` 時讀即時的日曆，`none` 時顯示頁面裡的行程 |
 | `dayStart`／`dayEnd` | "HH:MM" | 每天最早、最晚可排的時間（09:00／23:00） |
 | `earlyDays` | 陣列 | 要提早出門的日子，例如 `[{day:3, leave:"08:00", note:"09:10 有課"}]` |
 | `mealBreaks` | 陣列 | 不排事的休息時段，例如 `[{start:"18:10", end:"19:30", note:"晚餐"}]` |

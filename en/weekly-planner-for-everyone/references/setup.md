@@ -70,7 +70,7 @@ When the user provides a syllabus, turn the weekly schedule into `courses/<id>.s
 ## 5. Create the page
 
 1. Copy `assets/planner-page.html` and replace the `<title>` on line 2 with the title the user wants (for example, "Alex's Weekly Planner").
-2. Publish it with `Artifact`, using `capabilities: {"db": {}}` and `icon: "calendar"`, plus a one-sentence `description`.
+2. Publish it with `Artifact`, using `capabilities` (with Google Calendar: `{"db": {}, "mcp": {"servers": [{"server": "Google Calendar", "tools": ["list_events"]}]}}`, so the Month tab reads the live calendar; without it: `{"db": {}}`) and `icon: "calendar"`, plus a one-sentence `description`.
 3. Note the page URL; the scheduled tasks and everyday use will both need it.
 
 ## 6. Fill in the data
@@ -89,4 +89,4 @@ Following `references/scheduled-tasks.md`, create two kinds of tasks: the weekly
 
 ## 9. Wrap up
 
-In three or four sentences, tell the user: where the page is, what the first thing tomorrow is, how to tell you about changes (say it directly in any conversation, or write it in the page's "Tell Claude" tab), and that on a phone they can add the page to the home screen (iPhone: open the page in Safari → Share → Add to Home Screen, with Open as Web App on).
+In three or four sentences, tell the user: where the page is, what the first thing tomorrow is, how to tell you about changes (say it directly in any conversation, or tap "＋" at the bottom right of the page and write it in "Tell Claude"), and that on a phone they can add the page to the home screen (iPhone: open the page in Safari → Share → Add to Home Screen, with Open as Web App on).

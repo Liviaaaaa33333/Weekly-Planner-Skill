@@ -3,6 +3,25 @@
 格式參考 [Keep a Changelog](https://keepachangelog.com/)，版本號採用 [Semantic Versioning](https://semver.org/)。
 Format based on Keep a Changelog; versions follow Semantic Versioning.
 
+## [1.3.0] - 2026-10-04
+
+### 新增 Added
+- 「月曆」分頁：一次看五週，格子顯示每天的重點和忙碌程度，下方小標籤可以篩選類別（可複選），點一天從下面打開當天全部行程、左右滑換天。有連 Google 日曆時讀即時的日曆（連你自己建的活動也看得到），沒有就顯示頁面裡的行程。
+  New Month tab: five weeks at a glance, with each day's key items and a busyness bar, category filter chips (multi-select), and a sheet with the day's full schedule that you can swipe through. It reads Google Calendar live when connected, including events you added yourself, and otherwise shows the planner's own items.
+- 「今天」分頁：「現在」卡片（還剩幾分鐘、進度條）、今天進度、下一個截止日，以及今天的直線時間軸，藍線標出現在的位置。
+  New Today tab: a Now card with minutes left and a progress bar, today's progress, the next deadline, and a vertical timeline with a line marking the current time.
+
+### 變更 Changed
+- 介面改成像手機 App：底部分頁列（今天、本週、月曆、截止日、更多），右下角「＋」按鈕打開「告訴 Claude」和「加截止日」。下週預覽、課堂訊息、例行事項和規則移到「更多」。
+  The page now works like a phone app: a bottom tab bar (Today, Week, Month, Deadlines, More) and a "＋" button for Tell Claude and Add deadline. Next week, Classes, Routines and Rules moved under More.
+- 「本週」改成上方一排日期、下方只顯示選到的那天，不用一直往下滑。
+  The Week tab shows a row of dates with only the selected day below, so there's no long scroll.
+- 新外觀：淡寶寶藍、柔和毛玻璃、系統字體、圓形打勾；類別改用小色點表示，通勤縮成一行小字。深色模式跟著裝置設定。
+  New look: soft baby blue, light frosted glass, the system font and round checkmarks; categories are shown as small dots and commutes shrink to one line. Dark mode follows the device.
+
+1.2.0 的使用者：安裝新版 skill 後，跟 Claude 說「更新我的週行程頁面」。有連 Google 日曆的話，第一次打開「月曆」時按允許，讓頁面讀取日曆。
+Upgrading from 1.2.0: after installing the new skill, tell Claude "update my planner page". If you use Google Calendar, allow the page to read it the first time you open Month.
+
 ## [1.2.0] - 2026-10-04
 
 ### 新增 Added

@@ -15,7 +15,7 @@ Filled in during setup, and updated whenever the user says "change a setting". *
 | `tzOffsetHours` | number | Offset from UTC, used only as a fallback when `timezone` is invalid (8) |
 | `tzLabel` | string | Time zone name shown on the page, e.g. "Taipei time" |
 | `role` | string | `student` / `worker` / `other`; determines whether to use a class timetable and semester weeks |
-| `calendar` | object | `{type: "google" | "none", calendarId}`; only Google Calendar is supported, and `calendarId` is usually the user's Google account email |
+| `calendar` | object | `{type: "google" | "none", calendarId}`; only Google Calendar is supported, and `calendarId` is usually the user's Google account email; the page's Month tab reads the live calendar when it's `google` and shows the planner's own items when it's `none` |
 | `dayStart` / `dayEnd` | "HH:MM" | Earliest and latest times that can be scheduled each day (09:00 / 23:00) |
 | `earlyDays` | array | Days the user has to leave early, e.g. `[{day:3, leave:"08:00", note:"Class at 09:10"}]` |
 | `mealBreaks` | array | Breaks when nothing is scheduled, e.g. `[{start:"18:10", end:"19:30", note:"Dinner"}]` |

@@ -1,12 +1,13 @@
 # 週行程排程助理 Weekly Planner Skill
 
-一個給 Claude 用的非官方 skill · An unofficial skill for Claude · v1.2.0
+一個給 Claude 用的非官方 skill · An unofficial skill for Claude · v1.3.0
 
 [中文](#中文) · [English](#english) · [完整教學](docs/guide.md) · [Full guide](docs/guide.en.md)
 
 <p>
-  <img src="docs/screenshots/week-zh-phone.png" width="260" alt="週行程頁面：本週分頁（手機）">
-  <img src="docs/screenshots/deadlines-en.png" width="480" alt="Weekly planner page: Deadlines tab">
+  <img src="docs/screenshots/today-zh-phone.png" width="240" alt="週行程頁面：今天分頁（手機）">
+  <img src="docs/screenshots/month-zh-phone.png" width="240" alt="週行程頁面：月曆分頁（手機）">
+  <img src="docs/screenshots/deadlines-en.png" width="240" alt="Weekly planner page: Deadlines tab">
 </p>
 
 <sub>截圖中的資料都是虛構的範例。Screenshots use made-up demo data.</sub>
@@ -27,7 +28,7 @@
 
 - **排每週行程：** 依課表或班表、通勤、課前閱讀、截止日、例行事項，排出具體時段，並預留休息與空白。
 - **寫進日曆：** 寫進 Google 日曆，附上顏色與提醒；iPhone 和 Mac 可以用 Apple 行事曆看。
-- **一個隨時看得到的頁面：** 「現在該做」、本週和下週行程、截止日倒數、課前閱讀和每門課的實際進度都在同一頁，做完就打勾（日曆也會同步標記），寫錯的截止日或留言可以直接刪除。介面有中文和英文。
+- **一個隨時看得到的頁面：** 像手機 App 一樣，底部分頁切換「今天、本週、月曆、截止日、更多」。打開就看到現在該做什麼、今天的時間軸；月曆一次看五週、可以篩選類別；下週預覽、截止日倒數、課前閱讀和每門課的實際進度也都在裡面。做完就打勾（日曆也會同步標記），寫錯的截止日或留言可以直接刪除。介面有中文和英文，支援深色模式。
 - **每週跟你確認：** 固定時間傳下週草稿給你，你確認後才寫進日曆；也可以設定成排好就直接寫入。
 - **每天處理變動：** 在頁面留言「週四的課改到 9 點」「老師說下週改上第五章」，它會自動重排；提前做完的事，空出來的時間會拿去排後面的事。
 
@@ -100,15 +101,16 @@ It is designed around the needs of people with ADHD. The goal is to offer people
 The project started as a tool the author built for their own daily life. After using it for a while, they turned it into a public version anyone can set up.
 
 <p>
-  <img src="docs/screenshots/week-en-phone.png" width="260" alt="Weekly planner page: This week tab on a phone">
-  <img src="docs/screenshots/classes-en-dark.png" width="480" alt="Weekly planner page: Classes tab in dark mode">
+  <img src="docs/screenshots/today-en-phone.png" width="240" alt="Weekly planner page: Today tab on a phone">
+  <img src="docs/screenshots/week-en-phone.png" width="240" alt="Weekly planner page: Week tab on a phone">
+  <img src="docs/screenshots/month-en-dark.png" width="240" alt="Weekly planner page: Month tab in dark mode">
 </p>
 
 ### What it does
 
 - **Plans your week:** puts classes or shifts, commutes, readings, deadlines and routines into specific time slots, with breaks and buffer time.
 - **Writes to your calendar:** adds events to Google Calendar with colors and reminders. You can view them in Apple Calendar on iPhone and Mac.
-- **Gives you one page to check:** "Right now", this week's and next week's plans, deadline countdowns, readings and what each class actually covered, all on one page you can tick off (ticks show up in your calendar too). Deadlines or notes added by mistake can be deleted right there. The page works in English and Chinese.
+- **Gives you one page to check:** it works like a phone app, with tabs at the bottom for Today, Week, Month, Deadlines and More. Open it and you see what to do right now and today's timeline; the month view shows five weeks at once with category filters; next week, deadline countdowns, readings and what each class actually covered are all there too. Tick things off as you go (ticks show up in your calendar too), and delete deadlines or notes added by mistake. The page works in English and Chinese, with dark mode.
 - **Checks in every week:** sends you next week's draft at a set time and only writes it to your calendar after you approve, or writes it straight in if you prefer.
 - **Handles changes every day:** leave a note on the page ("Thursday's class moved to 9", "we're on chapter 5 next week") and it replans. When you finish something early, it uses the freed time for what's next.
 

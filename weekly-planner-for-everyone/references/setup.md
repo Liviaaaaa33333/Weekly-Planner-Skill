@@ -70,7 +70,7 @@
 ## 5. 建立頁面
 
 1. 複製 `assets/planner-page.html`，把第二行 `<title>` 換成她要的標題（例如「小明的週行程」或 "Alex's Weekly Planner"）。
-2. 用 `Artifact` 發佈，`capabilities: {"db": {}}`、`icon: "calendar"`，附一句 `description`。
+2. 用 `Artifact` 發佈，`capabilities`（有連 Google 日曆就用 `{"db": {}, "mcp": {"servers": [{"server": "Google Calendar", "tools": ["list_events"]}]}}`，讓「月曆」分頁讀即時的日曆；沒有就用 `{"db": {}}`）、`icon: "calendar"`，附一句 `description`。
 3. 記下頁面網址，之後的排程任務和日常使用都要用。
 
 ## 6. 填入資料
@@ -89,4 +89,4 @@
 
 ## 9. 收尾
 
-用三四句話告訴她：頁面在哪、明天第一件事是什麼、之後怎麼跟你說變動（在任何對話直接說，或寫在頁面的「告訴 Claude」），以及手機上可以把頁面加到主畫面（iPhone：用 Safari 打開頁面 → 分享 → 加入主畫面，保持「以網頁 App 打開」）。
+用三四句話告訴她：頁面在哪、明天第一件事是什麼、之後怎麼跟你說變動（在任何對話直接說，或按頁面右下角的「＋」寫在「告訴 Claude」），以及手機上可以把頁面加到主畫面（iPhone：用 Safari 打開頁面 → 分享 → 加入主畫面，保持「以網頁 App 打開」）。

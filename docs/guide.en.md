@@ -29,7 +29,7 @@ This guide covers everything from installation to troubleshooting. If you're new
 This is a Claude skill that pairs an AI assistant with your schedule. It's built on two of Claude's own features:
 
 - **Scheduled tasks:** Claude wakes up on its own at set times. Once a week it sends you a draft of next week's plan to confirm, and once a day it checks for any changes you've left.
-- **An interactive page:** a web page that belongs only to you. It shows what to do right now, this week's plan and a countdown to your deadlines, and you tick things off as you finish them.
+- **An interactive page:** a web page that belongs only to you, laid out like a phone app with Today, Week, Month and Deadlines tabs. It shows what to do right now and a countdown to your deadlines, and you tick things off as you finish them.
 
 Add the Google Calendar connector and your plan shows up in your phone's calendar, with reminders on time.
 
@@ -166,23 +166,29 @@ See also: [Schedule recurring tasks](https://support.claude.com/en/articles/1385
 
 ### Reading the page
 
-Open your planner page. At the top is the "Right now" card: what this block is for, when it ends, and the next two things. Below that are seven tabs:
+Open your planner page. There are five tabs at the bottom and a "＋" button at the bottom right:
 
 | Tab | What's in it |
 | --- | --- |
-| This week | Every time block, by date. Today is at the top and highlighted, then the days ahead; days already past move to the bottom. Tick things off when done; classes and commutes don't need ticking |
-| Next week | A summary of next week: number of classes, hours of reading and focus, the busiest day, a small chart of hours per day, admin and appointments not to forget, and each course's topic. Below, each day collapses to one line; open it for details. You can tick things off here if you finish early |
-| Deadlines | Add a deadline at the top; below, deadlines are sorted by date with a day countdown, and those within seven days are marked red; delete mistakes here |
-| Routines | Recurring things like checkups, haircuts and monthly payments, with the next date for each |
-| Classes | Your class schedule and what to read next for each course; changes from your instructor are marked "Updated". Open a course's full schedule to see the planned topic next to what was actually covered |
-| Tell Claude | A message box for writing down any changes; notes not yet handled can be deleted |
-| Rules | A summary of your settings |
+| Today | The "Now" card at the top: what this block is for, when it ends and how many minutes are left; when you're free, how long until the next thing. Below: today's progress, the nearest deadline, and today's timeline, a single line linking each item, with a blue line where you are now and commutes shrunk to one small line. Tick things off when done; classes and commutes don't need ticking |
+| Week | A row of dates at the top. Tap a day (or swipe) to see just that day's timeline, with no endless scrolling. Small dots under each date show what kinds of things it has |
+| Month | The next five weeks, with each day's key items in its cell. Filter chips below let you pick which categories to see (admin, deadlines, reading… several at once); tap a day to open everything on it from the bottom, and swipe to change days. With Google Calendar connected it reads your live calendar, so events you added yourself show up too |
+| Deadlines | A countdown list with the days left in large type, orange within seven days and red when late. Tap one to see its note or delete it; finished ones are collapsed at the bottom |
+| More | Next week (number of classes, hours of reading and focus, the busiest day, things not to forget, each course's topic, with each day collapsed to one line), Classes (what to read next, announcements, planned and covered topics for the whole term), Routines, and Rules (a summary of your settings) |
 
-![This week tab](screenshots/week-en-phone.png)
+**The "＋" button** opens a sheet that switches between "Tell Claude" (write down any change; your recent notes are listed below) and "Add deadline".
+
+The first time you open Month, the page may ask for permission to read your Google Calendar. Allow it.
+
+<p>
+  <img src="screenshots/today-en-phone.png" width="240" alt="Today tab">
+  <img src="screenshots/month-en-dark.png" width="240" alt="Month tab in dark mode">
+  <img src="screenshots/add-en.png" width="240" alt="Tell Claude">
+</p>
 
 ### Telling Claude about changes
 
-Just say it in any chat, or write it in the Tell Claude tab. Messages left on the page are handled at the next daily check.
+Just say it in any chat, or tap "＋" on the page and write it in Tell Claude. Messages left on the page are handled at the next daily check.
 
 - "New assignment: book report due 10/21"
 - "Thursday's class moved to 9 p.m." "Move next week's dentist to Friday"
@@ -205,10 +211,10 @@ Every tick is synced to your calendar at the next check: the event title gets "�
 
 If you add a deadline or a note by mistake, or add one twice, you can delete it on the page without waiting for Claude:
 
-- **Deadlines:** each deadline has a "Delete" button under its countdown on the right.
-- **Tell Claude:** only "Pending" notes can be deleted. "Scheduled" notes have already been handled, so deleting them wouldn't undo the changes; to change something, just leave a new note.
+- **Deadlines:** tap the deadline to open it; "Delete" is underneath.
+- **Tell Claude:** tap "＋"; among your recent notes, only "Pending" ones can be deleted. "Scheduled" notes have already been handled, so deleting them wouldn't undo the changes; to change something, just leave a new note.
 
-The first tap turns "Delete" into a red "Delete?". Tap again within 4 seconds to delete; otherwise it resets, so a stray tap on your phone does nothing. Deleted items are removed from your data and leave no trace on the page. **Deleting can't be undone.**
+The first tap turns "Delete" into "Delete?". Tap again within 4 seconds to delete; otherwise it resets, so a stray tap on your phone does nothing. Deleted items are removed from your data and leave no trace on the page. **Deleting can't be undone.**
 
 It's best to delete before Claude plans the item. If a deadline has already been planned, Claude's next check removes its all-day calendar event and any prep blocks made just for it, and tells you.
 
