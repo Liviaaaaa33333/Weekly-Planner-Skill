@@ -32,7 +32,8 @@ Filled in during setup, and updated whenever the user says "change a setting". *
 | `reminders` | object | Calendar reminder minutes (`{work:[10], appt:[1440,60], deadline:[900], bigDeadline:[9540,900]}`) |
 | `weeklyCheckin` | object | Weekly check-in time, e.g. `{day:0, time:"20:00"}` (0 = Sunday) |
 | `inboxChecks` | array | Times each day to check "Tell Claude" (`["08:00"]`). Each check uses some of the plan's allowance; at most 3 are recommended, e.g. `["07:50","12:00","18:00"]` |
-| `confirmBeforeCalendar` | boolean | Whether mid-week changes (additions, filling time freed by early finishes, course schedule changes) should be proposed before they're made (false: make the change, then notify) |
+| `confirmBeforeCalendar` | boolean | Whether mid-week changes (additions, filling time freed by early finishes, course schedule changes) should be proposed before they're made (false: make the change, then notify). Syncing ✅ check-offs isn't affected |
+| `weeklyAutoSync` | boolean | Write the weekly plan straight to the calendar instead of waiting for confirmation (false: send a draft first, write it after they confirm) |
 | `semesterStart` | "YYYY-MM-DD" | First day of week 1 of the semester; leave empty for non-students and the page won't show week numbers |
 | `semesterWeeks` | number | Number of weeks in the semester (18) |
 | `midtermWeeks` / `finalWeeks` | number array | Midterm and final weeks (e.g. `[9]`, `[16,18]`) |
@@ -45,9 +46,10 @@ Filled in during setup, and updated whenever the user says "change a setting". *
 
 Students put their courses here; working people can put recurring meetings or fixed shifts here, or skip this collection.
 
-`name, teacher, room, day(0=Sun…6=Sat), start, end, rule, lastAnnounce:{date,text}, schedule:[{date,text,updated,announce}]`
+`name, teacher, room, day(0=Sun…6=Sat), start, end, rule, lastAnnounce:{date,text}, schedule:[{date,text,actual,updated,announce}]`
 
 - `schedule` is what to read or prepare for each class meeting. Built from the syllabus, one entry per meeting.
+- `actual`: what the class actually covered (one sentence). Filled in only when they tell you or share class notes; shown in the "What we covered" column of the page's full schedule.
 - `rule`: special rules for this course, e.g. "6 absences means a zero" or "No need to come in unless a meeting is booked".
 - `updated` / `announce`: entries changed by a teacher announcement; the page marks them "Updated M/D".
 

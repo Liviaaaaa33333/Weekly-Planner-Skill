@@ -3,6 +3,27 @@
 格式參考 [Keep a Changelog](https://keepachangelog.com/)，版本號採用 [Semantic Versioning](https://semver.org/)。
 Format based on Keep a Changelog; versions follow Semantic Versioning.
 
+## [1.2.0] - 2026-10-04
+
+### 新增 Added
+- 頁面新增「下週」分頁：重點摘要（上課堂數、閱讀與專注時數、最滿的一天、每天量的小長條圖、要記得的事、上課進度），每天收合成一行，點開看細節。
+  New Next week tab: a summary (classes, reading and focus hours, busiest day, hours-per-day chart, things not to forget, class topics), with each day collapsed to one line.
+- 「全學期進度」改成三欄：日期、預定進度、實際進度。告訴 Claude 某堂課實際上了什麼，就會記在實際進度欄。
+  The full course schedule now has three columns: date, planned topic, and what was actually covered, filled in when you tell Claude.
+- 新設定 `weeklyAutoSync`：每週行程排好就直接寫進日曆，不用等確認（預設關閉）。
+  New `weeklyAutoSync` setting writes the weekly plan straight to the calendar without waiting for confirmation (off by default).
+- 打勾一律同步到日曆：打勾的項目在日曆加「✅」並取消提醒，取消打勾就拿掉。
+  Every tick syncs to the calendar: ticked items get ✅ and lose their reminders; unticking reverses it.
+
+### 變更 Changed
+- 回答任何行程問題前，Claude 會先讀頁面最新的資料，包括「告訴 Claude」裡的所有留言。
+  Before answering any schedule question, Claude reads the page's latest data, including every Tell Claude note.
+- 已預約、時間確定的事，即使那一週還沒排，也會直接寫進日曆。
+  Bookings with a fixed time go straight onto the calendar even if that week isn't planned yet.
+
+1.1.0 的使用者：安裝新版 skill 後，跟 Claude 說「更新我的週行程頁面」就會加上「下週」分頁與實際進度欄；排程任務的提示詞也請 Claude 依新版 `references/scheduled-tasks.md` 更新。
+Upgrading from 1.1.0: after installing the new skill, tell Claude "update my planner page" to get the Next week tab and the new column, and ask Claude to update your scheduled tasks from the new `references/scheduled-tasks.md`.
+
 ## [1.1.0] - 2026-09-29
 
 ### 新增 Added

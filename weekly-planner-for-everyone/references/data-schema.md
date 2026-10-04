@@ -32,7 +32,8 @@
 | `reminders` | 物件 | 日曆提醒分鐘數（`{work:[10], appt:[1440,60], deadline:[900], bigDeadline:[9540,900]}`） |
 | `weeklyCheckin` | 物件 | 每週確認時間，例如 `{day:0, time:"20:00"}`（0＝週日） |
 | `inboxChecks` | 陣列 | 每天檢查「告訴 Claude」的時間（`["08:00"]`）。每次檢查都會用到方案額度，最多建議 3 次，例如 `["07:50","12:00","18:00"]` |
-| `confirmBeforeCalendar` | 布林 | 週中改動（新增、提前完成補位、課程進度變動）要不要先問再改（false：直接改好再通知） |
+| `confirmBeforeCalendar` | 布林 | 週中改動（新增、提前完成補位、課程進度變動）要不要先問再改（false：直接改好再通知）。打勾同步 ✅ 不受影響 |
+| `weeklyAutoSync` | 布林 | 每週排程排好就直接寫進日曆、不等她確認（false：先傳草稿，確認後才寫入） |
 | `semesterStart` | "YYYY-MM-DD" | 學期第 1 週的第一天；非學生留空，頁面就不顯示週次 |
 | `semesterWeeks` | 數字 | 學期共幾週（18） |
 | `midtermWeeks`／`finalWeeks` | 數字陣列 | 期中週、期末週（例如 `[9]`、`[16,18]`） |
@@ -45,9 +46,10 @@
 
 學生放課程；上班族可以放固定會議、固定班表，或是不用這個集合。
 
-`name, teacher, room, day(0=日…6=六), start, end, rule, lastAnnounce:{date,text}, schedule:[{date,text,updated,announce}]`
+`name, teacher, room, day(0=日…6=六), start, end, rule, lastAnnounce:{date,text}, schedule:[{date,text,actual,updated,announce}]`
 
 - `schedule` 是每次上課要讀或要準備的內容。從課綱（syllabus）整理出來，一次上課一筆。
+- `actual`：這堂課實際上了什麼（一句話）。她說了或給了課堂筆記才填；頁面「全學期進度」表的「實際進度」欄。
 - `rule`：這門課的特殊規則，例如「缺課 6 次 0 分」「沒約面談不用到校」。
 - `updated`／`announce`：老師公告改過的條目，頁面會標「M/D 更新」。
 

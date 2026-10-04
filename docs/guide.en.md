@@ -132,10 +132,11 @@ Scheduled tasks are what let this project run on its own, and they need a paid p
 1. Reads your page and rolls anything unfinished from last week into next week.
 2. Drafts next week's plan and sends it to you: a one-line overview, a day-by-day table, and major deadlines for the next three weeks.
 3. Asks just two questions: Anything new next week, like assignments, appointments or plans without a fixed time? Were last week's time estimates too much, about right or too little?
-4. Writes to your calendar only after you reply to confirm.
+4. Writes to your calendar only after you reply to confirm. To skip this step, tell Claude "Write the weekly plan straight to my calendar, don't wait for me": from then on it goes straight in, the message says it's already in your calendar, and you just reply if anything should change.
 
 **Daily check (default 08:00, once a day)**
 - Handles new messages you've left in Tell Claude.
+- Syncs what you ticked on the page to your calendar: a ticked item gets "✅" in its event title and loses its reminder; unticking removes the ✅.
 - Handles tasks you finished early and uses the freed-up time for what comes next.
 - If anything changed, sends you a sentence or two about it; if nothing did, it leaves you alone.
 
@@ -165,14 +166,15 @@ See also: [Schedule recurring tasks](https://support.claude.com/en/articles/1385
 
 ### Reading the page
 
-Open your planner page. At the top is the "Right now" card: what this block is for, when it ends, and the next two things. Below that are six tabs:
+Open your planner page. At the top is the "Right now" card: what this block is for, when it ends, and the next two things. Below that are seven tabs:
 
 | Tab | What's in it |
 | --- | --- |
 | This week | Every time block, by date. Today is at the top and highlighted, then the days ahead; days already past move to the bottom. Tick things off when done; classes and commutes don't need ticking |
+| Next week | A summary of next week: number of classes, hours of reading and focus, the busiest day, a small chart of hours per day, admin and appointments not to forget, and each course's topic. Below, each day collapses to one line; open it for details. You can tick things off here if you finish early |
 | Deadlines | Add a deadline at the top; below, deadlines are sorted by date with a day countdown, and those within seven days are marked red; delete mistakes here |
 | Routines | Recurring things like checkups, haircuts and monthly payments, with the next date for each |
-| Classes | Your class schedule and what to read next for each course; changes from your instructor are marked "Updated" |
+| Classes | Your class schedule and what to read next for each course; changes from your instructor are marked "Updated". Open a course's full schedule to see the planned topic next to what was actually covered |
 | Tell Claude | A message box for writing down any changes; notes not yet handled can be deleted |
 | Rules | A summary of your settings |
 
@@ -186,14 +188,18 @@ Just say it in any chat, or write it in the Tell Claude tab. Messages left on th
 - "Thursday's class moved to 9 p.m." "Move next week's dentist to Friday"
 - "From now on, three workouts a week"
 - "The professor says we're doing chapter 5 next week" "No class on 10/21" "Midterm moved to 11/19"
-- "What should I be doing right now?"
+- "What should I be doing right now?" "When is my haircut?": for any question about your schedule, Claude first reads the latest data on your page (including your notes) before answering
+- "Statistics only got as far as the binomial distribution today": recorded in the "What we covered" column of the full schedule
+- "Haircut is booked for Friday 1 p.m. the week after next": something already booked goes straight onto your calendar, without waiting until that week is planned
 - "I'm wiped out today. Push this afternoon's stuff back"
 
 ### Ticking things off
 
 Tick tasks off on the page when you finish them. This week and Deadlines stay in sync: tick off "Send recommendation letter," and the letter in Deadlines is marked done too.
 
-**Tick things off even when you finish early.** If you finish before the scheduled block, the next check uses that time for later tasks, adds "✅" to the calendar event's title, and cancels its reminder.
+Every tick is synced to your calendar at the next check: the event title gets "✅" and its reminder is cancelled; untick it and the ✅ comes off and the reminder comes back.
+
+**Tick things off even when you finish early.** If you finish before the scheduled block, the next check also uses that time for later tasks.
 
 ### Deleting mistakes
 
@@ -243,6 +249,7 @@ Apple Calendar shows the whole Google calendar in one color, so you won't see th
 | Change the weekly check-in time | "Move the weekly check-in to Saturday morning" |
 | Change how often the daily check runs | "Check three times a day: morning, noon and evening" |
 | Be asked before changes | "Ask me before changing my calendar": mid-week changes are sent to you first and only made once you agree |
+| Skip the weekly confirmation | "Write the weekly plan straight to my calendar, don't wait for me": the plan goes in as soon as it's made; say if anything should change |
 | Change the page language | "Switch the page to Chinese" |
 | Add a routine | "Haircut every 6 weeks, remind me a week ahead to book it" |
 

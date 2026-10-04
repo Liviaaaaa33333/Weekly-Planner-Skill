@@ -1,6 +1,6 @@
 # 週行程排程助理 Weekly Planner Skill
 
-一個給 Claude 用的非官方 skill · An unofficial skill for Claude · v1.1.0
+一個給 Claude 用的非官方 skill · An unofficial skill for Claude · v1.2.0
 
 [中文](#中文) · [English](#english) · [完整教學](docs/guide.md) · [Full guide](docs/guide.en.md)
 
@@ -27,8 +27,8 @@
 
 - **排每週行程：** 依課表或班表、通勤、課前閱讀、截止日、例行事項，排出具體時段，並預留休息與空白。
 - **寫進日曆：** 寫進 Google 日曆，附上顏色與提醒；iPhone 和 Mac 可以用 Apple 行事曆看。
-- **一個隨時看得到的頁面：** 「現在該做」、本週行程、截止日倒數、課前閱讀都在同一頁，做完就打勾，寫錯的截止日或留言可以直接刪除。介面有中文和英文。
-- **每週跟你確認：** 固定時間傳下週草稿給你，你確認後才寫進日曆。
+- **一個隨時看得到的頁面：** 「現在該做」、本週和下週行程、截止日倒數、課前閱讀和每門課的實際進度都在同一頁，做完就打勾（日曆也會同步標記），寫錯的截止日或留言可以直接刪除。介面有中文和英文。
+- **每週跟你確認：** 固定時間傳下週草稿給你，你確認後才寫進日曆；也可以設定成排好就直接寫入。
 - **每天處理變動：** 在頁面留言「週四的課改到 9 點」「老師說下週改上第五章」，它會自動重排；提前做完的事，空出來的時間會拿去排後面的事。
 
 為什麼這樣設計、每個功能對應哪一種困難，請看[完整教學第 2 章](docs/guide.md#2-為什麼這樣設計)。
@@ -108,8 +108,8 @@ The project started as a tool the author built for their own daily life. After u
 
 - **Plans your week:** puts classes or shifts, commutes, readings, deadlines and routines into specific time slots, with breaks and buffer time.
 - **Writes to your calendar:** adds events to Google Calendar with colors and reminders. You can view them in Apple Calendar on iPhone and Mac.
-- **Gives you one page to check:** "Right now", this week's plan, deadline countdowns and readings, all on one page you can tick off. Deadlines or notes added by mistake can be deleted right there. The page works in English and Chinese.
-- **Checks in every week:** sends you next week's draft at a set time and only writes it to your calendar after you approve.
+- **Gives you one page to check:** "Right now", this week's and next week's plans, deadline countdowns, readings and what each class actually covered, all on one page you can tick off (ticks show up in your calendar too). Deadlines or notes added by mistake can be deleted right there. The page works in English and Chinese.
+- **Checks in every week:** sends you next week's draft at a set time and only writes it to your calendar after you approve, or writes it straight in if you prefer.
 - **Handles changes every day:** leave a note on the page ("Thursday's class moved to 9", "we're on chapter 5 next week") and it replans. When you finish something early, it uses the freed time for what's next.
 
 For why it's designed this way and which difficulty each feature addresses, see [chapter 2 of the full guide](docs/guide.en.md#2-why-its-designed-this-way).

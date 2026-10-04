@@ -42,10 +42,28 @@ window.PLANNER_DEMO = ({day, today}) => {
     it(6,"10:00","10:50",T("統計學課前預習：第 5 章","Statistics preview: ch. 5"),"read"),
     it(6,"20:00","20:20",T("每週確認下週行程","Weekly check-in with Claude"),"admin"),
   ];
+  const next = [
+    it(7,"08:20","09:00",T("通勤到學校","Commute to campus"),"commute"),
+    it(7,"09:10","12:00",T("統計學","Statistics"),"class"),
+    it(7,"13:30","13:50",T("上傳交換學生申請資料","Upload exchange application files"),"admin",{dls:["d5"]}),
+    it(7,"14:10","15:00",T("國關導論課前閱讀：第 6 章","IR reading: ch. 6"),"read"),
+    it(8,"09:30","10:20",T("期中報告：第三節","Midterm paper: section 3"),"focus"),
+    it(8,"19:00","19:50",T("線上英文課","Online English class"),"class"),
+    it(9,"08:20","09:00",T("通勤到學校","Commute to campus"),"commute"),
+    it(9,"09:10","12:00",T("國際關係導論","Intro to International Relations"),"class"),
+    it(9,"14:00","14:50",T("期中報告：結論","Midterm paper: conclusion"),"focus"),
+    it(10,"10:00","10:50",T("學術英文寫作課前閱讀","Academic Writing reading"),"read"),
+    it(10,"15:00","16:00",T("健身","Gym"),"routine"),
+    it(11,"08:20","09:00",T("通勤到學校","Commute to campus"),"commute"),
+    it(11,"10:10","12:00",T("學術英文寫作","Academic Writing"),"class"),
+    it(12,"14:00","15:00",T("剪頭髮","Haircut"),"appt"),
+    it(13,"10:00","10:50",T("期中報告：全文校對","Midterm paper: proofread"),"focus"),
+  ];
   // 今天的前兩個可勾選項目在過去就標完成，看起來比較真實
   return {
     settings,
-    weeks: [{_id: day(0), weekStart: day(0), weekEnd: day(6), label: T("本週行程","This week"), status: "synced", items}],
+    weeks: [{_id: day(0), weekStart: day(0), weekEnd: day(6), label: T("本週行程","This week"), status: "synced", items},
+             {_id: day(7), weekStart: day(7), weekEnd: day(13), label: T("下週行程","Next week"), status: "synced", items: next}],
     deadlines: [
       {_id:"d1", title:T("填獎學金申請表","Fill in scholarship form"), date:day(2), time:"17:00", cat:"admin", done:true, note:""},
       {_id:"d2", title:T("統計作業 3","Statistics homework 3"), date:day(4), time:"23:59", cat:"due", done:false, note:T("線上繳交","Submit online")},
@@ -61,10 +79,10 @@ window.PLANNER_DEMO = ({day, today}) => {
     ],
     courses: [
       {_id:"c1", name:T("統計學","Statistics"), teacher:T("林老師","Prof. Lin"), room:"B201", day:1, start:"09:10", end:"12:00", rule:"",
-        schedule:[{date:day(0),text:T("第 4 章 抽樣分配","Ch. 4 Sampling distributions")},{date:day(7),text:T("第 5 章 信賴區間","Ch. 5 Confidence intervals")},{date:day(14),text:T("第 6 章 假設檢定","Ch. 6 Hypothesis testing")}]},
+        schedule:[{date:day(-7),text:T("第 3 章 機率分配","Ch. 3 Probability distributions"),actual:T("第 3 章，只上到二項分配","Ch. 3, stopped at the binomial distribution")},{date:day(0),text:T("第 4 章 抽樣分配","Ch. 4 Sampling distributions")},{date:day(7),text:T("第 5 章 信賴區間","Ch. 5 Confidence intervals")},{date:day(14),text:T("第 6 章 假設檢定","Ch. 6 Hypothesis testing")}]},
       {_id:"c2", name:T("國際關係導論","Intro to International Relations"), teacher:T("陳老師","Prof. Chen"), room:"S310", day:3, start:"09:10", end:"12:00", rule:T("缺課 3 次扣學期成績","3 absences lower the final grade"),
         lastAnnounce:{date:day(-1), text:T("下週改上第 5 章，第 4 章自己讀","Next week moves to ch. 5; read ch. 4 on your own")},
-        schedule:[{date:day(2),text:T("第 5 章 權力平衡","Ch. 5 Balance of power"),updated:day(-1),announce:T("老師調整進度","Schedule changed by the teacher")},{date:day(9),text:T("第 6 章 國際制度","Ch. 6 International institutions")}]},
+        schedule:[{date:day(-5),text:T("第 4 章 國際體系","Ch. 4 The international system"),actual:T("第 4 章前半＋課堂討論","First half of ch. 4 and a class discussion")},{date:day(2),text:T("第 5 章 權力平衡","Ch. 5 Balance of power"),updated:day(-1),announce:T("老師調整進度","Schedule changed by the teacher")},{date:day(9),text:T("第 6 章 國際制度","Ch. 6 International institutions")}]},
       {_id:"c3", name:T("學術英文寫作","Academic Writing"), teacher:T("王老師","Prof. Wang"), room:"L105", day:5, start:"10:10", end:"12:00", rule:"",
         schedule:[{date:day(4),text:T("Paraphrasing 練習","Paraphrasing practice")},{date:day(11),text:T("文獻回顧寫法","Writing a literature review")}]},
     ],

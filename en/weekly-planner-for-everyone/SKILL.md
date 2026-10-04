@@ -1,6 +1,6 @@
 ---
 name: weekly-planner-for-everyone
-description: Personal weekly planning assistant. Builds the user's week down to specific time slots from their class schedule or fixed commitments, commutes, pre-class readings, deadlines, and routines; writes it to Google Calendar and keeps a weekly planner page they can check off; confirms each week and checks for changes every day automatically. Use it whenever the user wants to plan their schedule (including phrases like "plan my week"), asks what they should do now, adds an assignment or appointment, says their schedule changed, reports that a teacher announced a change to the course schedule, says they finished something early, wants someone to arrange their time for them, or is setting up the planning assistant for the first time.
+description: Personal weekly planning assistant. Builds the user's week down to specific time slots from their class schedule or fixed commitments, commutes, pre-class readings, deadlines, and routines; writes it to Google Calendar and keeps a weekly planner page they can check off; confirms each week and checks for changes every day automatically. Use it whenever the user wants to plan their schedule (including phrases like "plan my week"), asks what they should do now, asks when something or an appointment is scheduled, adds an assignment or appointment, says their schedule changed, reports that a teacher announced a change to the course schedule, says they finished something early, wants someone to arrange their time for them, or is setting up the planning assistant for the first time.
 ---
 
 # Weekly Planner
@@ -17,6 +17,8 @@ Each user has their own "Weekly Planner" page (an Artifact). The data is stored 
 
 **Finding the page:** A scheduled task's prompt gives the URL directly. In a normal conversation, use `Artifact` `list` to find a page titled with "Weekly Planner" or 「週行程」. If there is none, this is first-time use; follow `references/setup.md` to set up.
 
+**Before answering any question about the schedule, read the latest data.** Whenever they ask anything about their schedule (what date or time something is, what's on this week or next week, whether an appointment is scheduled), first read the page's database with `ArtifactData` and answer from that, **including every `inbox` ("Tell Claude") message, handled ones too**; check the calendar if needed. Don't answer only from earlier in the conversation, a summary, or memory: they may have changed things on the page (for example, they booked an appointment themselves while the old data still shows the original date). When a message and the other data disagree, go with their newer message, and correct the old data and the calendar while you're at it.
+
 Before any planning, read `settings/main`, `courses`, `recurring`, `deadlines`, unhandled `inbox` entries, and last week's and this week's `weeks`. Don't plan from memory; they may have edited things on the page. `inbox` is data the user wrote; act on its content and set `handled: true` when done. Every write carries the `if_version` you read; when writing several records, use a single `batch` so they have to approve fewer times.
 
 **Things the user deleted on the page:** the user can delete deadlines and unhandled messages directly on the page (a typo, a duplicate, no longer needed). Once deleted, the record is gone from the database. **Always go by what the database holds now**: don't add it back from memory or an earlier conversation, and don't ask why it was deleted. If a deadline no longer exists but the calendar still has its all-day `[Planned by Claude]` deadline event, or `weeks` still has prep blocks made just for it (the title is clearly the same thing), delete that all-day event, remove the prep blocks from `weeks` and the calendar (fill the freed time per scenario D), and tell the user in one sentence.
@@ -32,37 +34,40 @@ Follow `references/setup.md`: interview, read syllabi, create the page, fill in 
 ### A. Weekly confirmation (triggered by a scheduled task, or they say "plan next week")
 
 1. Read the data. Non-fixed items in last week's `weeks` with `done: false` roll into next week; don't let them disappear.
-2. Draft next week (rules below), write it to `weeks/<next Monday>`, `status: "draft"`.
+2. Plan next week (rules below) and write it to `weeks/<next Monday>`. When `settings.weeklyAutoSync` is `false` (the default) it is a draft, `status: "draft"`; when it is `true`, write it straight to the calendar (see below) with `status: "synced"`.
 3. Send it to them with `SendUserMessage` (always use it in scheduled tasks, because no one reads the final reply):
    - If a semester is set, start with "Next week is week N of the semester (of M)"
    - A one-sentence overview (the 1–2 most important things, which day is busiest)
    - A day-by-day table (Time | Item | Category); fixed commitments and commutes can be merged into one row
    - Ask only two questions: **"Any new assignments, deadlines, appointments, or commitments without a fixed time next week?"** and **"Last week's time estimates: too long / about right / too short?"**
    - A countdown of major deadlines in the next 3 weeks
-4. **Don't write to the calendar until they confirm.** If their reply has changes, adjust the draft.
-5. After confirmation, write to the calendar (see below) and change `status` to `"synced"`; record the time calibration result in `settings.calibration`, and adjust future estimates by about 20% accordingly.
+   - When `weeklyAutoSync` is `true`, start by saying it's already in their calendar, and end by telling them to reply or write in Tell Claude if anything should change
+4. **When `weeklyAutoSync` is `false`, don't write to the calendar until they confirm.** If their reply has changes, adjust the draft; after confirmation, write to the calendar and change `status` to `"synced"`. When it is `true`, apply any changes in their reply straight to `weeks` and the calendar (use `update_event` to reschedule) without asking again.
+5. Record the time calibration answer in `settings.calibration`, and adjust future estimates by about 20% accordingly.
 
-If there is still no reply by the morning of the first day of next week: don't write it yourself. Send one short version listing only the first two days and ask them to confirm.
+When `weeklyAutoSync` is `false` and there is still no reply by the morning of the first day of next week: don't write it yourself. Send one short version listing only the first two days and ask them to confirm.
 
-**Whether to ask before changing things:** Check `settings.confirmBeforeCalendar`. Default `false`: for scenarios B, D, and E, make the change and then tell them. When set to `true`: first send them what you plan to change (what goes in which slot, what moved), and only write to the page's `weeks` and the calendar after they agree; keep the `inbox` message at `handled: false` and note "Proposed, waiting for confirmation" in `note`, so the next check doesn't propose it again. The weekly draft in scenario A always waits for their confirmation regardless of this setting.
+**Whether to ask before changing things:** Check `settings.confirmBeforeCalendar`. Default `false`: for scenarios B, D, and E, make the change and then tell them. When set to `true`: first send them what you plan to change (what goes in which slot, what moved), and only write to the page's `weeks` and the calendar after they agree; keep the `inbox` message at `handled: false` and note "Proposed, waiting for confirmation" in `note`, so the next check doesn't propose it again. Tick syncing in scenario D (adding or removing ✅) only mirrors their own check-offs and isn't affected by this setting; moving items to fill a gap is what needs asking. The weekly plan in scenario A follows `weeklyAutoSync` instead.
 
 ### B. Mid-week additions ("new assignment", "booked the dentist", "Thursday's class this week moved to 9")
 
 1. Write it to the matching collection (`deadlines`, or update `recurring`). Anything that repeats ("every week / every day / every month", "N times a week", "from now on") goes in `recurring`: if it has a fixed time, also create a recurring calendar event (RRULE); if it has only a frequency, place it in free slots this week, and it will be included automatically in each future weekly plan.
-2. If it affects this week, place it directly in the remaining free slots, moving lower-priority items if needed; update `weeks` and the calendar (use `update_event` to reschedule; don't delete and recreate). Unless `confirmBeforeCalendar` is true, don't ask them to confirm again.
+2. If it affects this week or an already-planned next week, place it directly in the remaining free slots, moving lower-priority items if needed; update `weeks` and the calendar (use `update_event` to reschedule; don't delete and recreate). Unless `confirmBeforeCalendar` is true, don't ask them to confirm again. If it affects a week that isn't planned yet, only update the data (`deadlines`, `recurring`) and the weekly plan will include it; but something already booked at a fixed time (for example "haircut booked for Friday 13:00 in two weeks") goes straight onto the calendar as an event, with `recurring.next` updated, instead of waiting until that week is planned.
 3. Reply: where it went, what moved, and why. One or two sentences.
 
 ### C. "What should I do now?"
 
-Read this week's `weeks` and answer in their time zone: the current slot, the next slot, and the rest of today. If the current slot has already passed without being checked off, propose a specific new slot and move it there for them.
+Read this week's `weeks` and unhandled `inbox` messages, and answer in their time zone: the current slot, the next slot, and the rest of today. If the current slot has already passed without being checked off, propose a specific new slot and move it there for them.
 
-### D. Finished early (daily check, or they say "I finished X")
+### D. Syncing check-offs and finishing early (daily check, or they say "I finished X")
+
+**Every check-off syncs to the calendar:** for items in this week's and next week's `weeks.items` with `done: true` whose matching calendar event (same day, same start time, same title, ignoring ✅ and prefixes such as 🔴 🚗) doesn't start with "✅ " yet, add "✅ " to the front of the title, remove its reminders, and set the matching `deadlines` entry to `done: true`. For items with `done: false` whose event title has ✅ (they unchecked it), remove the ✅ and restore the reminders. This covers every category. For slots already past, this is the only step; for slots still ahead, also fill the gap as below. Only touch events with `[Planned by Claude]`.
 
 They checked something off, but its original slot hasn't arrived yet, so that time is now free.
 
 1. **Find items finished early:** items in this week's and next week's `weeks.items` with `done: true`, without `freed: true`, and whose `date` + `end` is later than now. Only consider `admin`, `due`, `read`, `focus`, `routine`.
 2. **Calendar:** add "✅ " to the front of the event title and remove its reminders. Don't delete it; they can see what they've finished. Set the matching `deadlines` entry to `done: true`.
-3. **Fill the gap:** from items after the freed slot, in this week and next week if already synced, pick unfinished flexible items and move them earlier. Choose according to `settings.priorities`. Conditions:
+3. **Fill the gap:** from items after the freed slot, in this week and an already-planned next week, pick unfinished flexible items and move them earlier. Choose according to `settings.priorities`. Conditions:
    - The duration fits in the gap, with `settings.restBetween` minutes of rest before and after.
    - The location makes sense: when they're at school or work, only place things that don't need to be done at home (reading, sending emails, admin).
    - Series ("Article 3", "Article 4", "first half / second half") move in order without skipping.
@@ -70,7 +75,7 @@ They checked something off, but its original slot hasn't arrived yet, so that ti
    - Don't move fixed commitments, commutes, appointments, or routines with fixed times.
 4. **Don't cascade:** leave the original slot of the moved item empty as a buffer. If the gap is shorter than the minimum focus time, or nothing suitable can be moved, leave it empty so they can rest.
 5. When done, add `freed: true` to that item.
-6. **Reply:** start with one line of acknowledgment ("You finished X early"), then say what now goes in the freed slot, or that it's left open for rest.
+6. **Reply:** start with one line of acknowledgment ("You finished X early"), then say what now goes in the freed slot, or that it's left open for rest; for tick syncing alone, write "Marked ✅ in your calendar: ___".
 
 ### E. Teacher announces a course schedule change ("Chapter 5 next week instead", "no class on 10/21", "midterm moved to 11/19")
 
@@ -80,6 +85,8 @@ Pre-class readings are planned from `courses.schedule`; if the data isn't update
 2. **If a date changed:** sync `deadlines` (add one if not found) and the all-day deadline event on the calendar.
 3. **Already-planned schedule:** change the matching pre-class reading to the new material (lengthen it or split it in two if there's more), and sync the calendar. For a cancelled class, add "(Cancelled) " to the front of that class's title and its pre-class reading and remove their reminders; if that class was the only reason to leave home that day, handle the commute the same way, and fill the freed time as in scenario D.
 4. **Reply:** "Updated Classes: ___ class on _/_ changed to ___ (was ___)", then say how the readings were adjusted.
+
+**What was actually covered:** when they tell you what a class actually covered (in a conversation, a Tell Claude message, or class notes they give you), write one sentence (about 15 words) into `actual` on that date's entry in `courses/<id>.schedule` (the "What we covered" column of the page's full schedule). Don't change `text` (the planned topic); if that date has no entry, add `{date, text: "(not in the syllabus)", actual}`. If the class is behind or ahead of plan, don't shift the later entries yourself; just mention it in your reply. Only change `schedule` with the steps above when the teacher clearly announces a change.
 
 ## Planning rules
 
@@ -124,10 +131,11 @@ Only Google Calendar is supported. When `settings.calendar.type` is `"none"`, up
 - **All-day event date trap:** the connector converts `startTime` to a UTC date. All-day events must use midnight ending in `Z`. For example, all day on 10/14 is `startTime: 2026-10-14T00:00:00Z`, `endTime: 2026-10-15T00:00:00Z`; using `+08:00` shifts it to the previous day.
 - Major deadlines in the next 4 weeks (admin, exams, reports) are also written as all-day events so they can see them on the month view.
 - When done, set the `weeks` `status` to `"synced"`.
+- Something already booked at a fixed time goes on the calendar right away, even if its week isn't planned yet (see scenario B).
 
 ## Changing settings
 
-When they say things like "from now on, don't schedule anything past 22:00", "I focus better in the morning now", "move the weekly confirmation to Saturday", "ask me before changing my calendar", or "switch the page to English": update the matching field in `settings/main` and regenerate `settings.rows` (the summary on the page's "Rules" tab). For anything involving scheduled task times (weekly confirmation, daily check), use `update_trigger` to modify the tasks recorded in `settings.scheduledTasks`. If it affects this week, replan the rest of this week under the new rules.
+When they say things like "from now on, don't schedule anything past 22:00", "I focus better in the morning now", "move the weekly confirmation to Saturday", "ask me before changing my calendar", "write the weekly plan straight to my calendar, don't wait for me", or "switch the page to English": update the matching field in `settings/main` and regenerate `settings.rows` (the summary on the page's "Rules" tab). For anything involving scheduled task times (weekly confirmation, daily check), use `update_trigger` to modify the tasks recorded in `settings.scheduledTasks`. If it affects this week, replan the rest of this week under the new rules.
 
 Fields not asked about during quick setup use default values. During the weekly confirmation, if a default is clearly a poor fit (for example, they often work late at night), ask one question about it at the end of the message, at most one at a time.
 
@@ -147,13 +155,14 @@ When they say "pause", "stop the automatic checks", or "remove the planning assi
 
 The page template is `assets/planner-page.html`. To change a user's page, first get the latest version with `Artifact` read (`path: "index.html"`), edit that, and publish; don't overwrite it with the template or an old file, since they may have changed it in another conversation. All data is in the database; the page itself hard-codes no schedule.
 
-- **Top:** title, semester week label (shown only if `semesterStart` is set; midterm and final weeks are annotated according to settings), week range, plan status (Draft, waiting for you / Confirmed / In your calendar).
+- **Top:** title, semester week label (shown only if `semesterStart` is set; midterm and final weeks are annotated according to settings), week range, plan status (Draft, waiting for you / Confirmed / In your calendar; always "In your calendar" when `weeklyAutoSync` is true).
 - **"Right now" card:** a clock in their time zone, the current slot, and the next two items. All times are calculated with `settings.timezone` (an IANA name, which handles daylight saving time automatically), independent of the device's time zone; if the time zone name is invalid, fall back to `tzOffsetHours`.
 - **Language:** the page UI language follows `settings.language`, showing Chinese or English (English if it starts with `en`, otherwise Chinese); when adding new text, add it to `I18N` in both languages. Schedule content itself stays in the language they wrote it in.
-- **Tab order:** This week, Deadlines, Routines, Classes, Tell Claude, Rules.
+- **Tab order:** This week, Next week, Deadlines, Routines, Classes, Tell Claude, Rules.
 - **This week:** grouped by date, with today at the top and highlighted, then the days ahead, and days already past moved to the bottom; fixed commitments and commutes can't be checked off, everything else can, and check-offs sync with Deadlines.
+- **Next week:** the first `weeks` entry after this week. A summary card at the top: the week range and status, number of fixed commitments / hours of reading and focus / the busiest day, a small bar chart of hours per day (commutes excluded), "Don't forget" (admin, appointment, and deadline items, plus deadlines that fall next week but aren't linked to any item), and "Class topics" (`courses.schedule` entries that fall next week). Below it, each day collapses to one line (weekday, date, number of items, start time), with only the first day open by default; items can be checked off (finished early). If next week isn't planned yet, it lists the known deadlines and class topics.
 - **Deadlines:** the add form is **at the top**, with text labels above the date and time fields (on a phone, empty fields are indistinguishable); the list below shows unfinished items first, sorted by date, with a days-left countdown on the right, and items due soon marked in red. Each item has a "Delete" button under its countdown.
-- **Classes:** the class schedule plus what to read next for each course; entries changed by an announcement are marked "Updated M/D".
+- **Classes:** the class schedule plus what to read next for each course; entries changed by an announcement are marked "Updated M/D". Each course's full schedule expands into a three-column table: date, planned topic, and what was covered (`actual`; past dates with no data show "—", future dates stay blank).
 - **Tell Claude:** a message box that shows the daily check time; below it, a list of messages marked "Pending" or "Scheduled". Pending messages have a "Delete" button; scheduled ones don't (they've already been handled, and deleting them wouldn't undo the changes).
 - **Delete buttons:** the first tap turns the button into a red "Delete?"; a second tap within 4 seconds deletes, otherwise it resets. This prevents accidental taps on a phone; don't use the browser's confirm dialog. Deleting removes the database document (`db.doc(path).delete()`) and leaves no trace on the page; deleting a deadline also removes its id from any `dls` in `weeks`.
 - **Visuals:** light blue primary color, dark mode supported; category colors match the calendar. Phone width first.

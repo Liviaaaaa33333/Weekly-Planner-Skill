@@ -18,11 +18,11 @@
 資料在 {{PAGE_URL}}（用 ArtifactData 讀寫）。時間一律以 {{TZ}} 為準，先用 bash 的 TZ={{TZ}} date 確認現在時間。
 
 如果找不到這個 skill，照以下步驟做：
-1. 讀取 settings/main、courses、recurring、deadlines、inbox（handled=false）、weeks（本週與下週）。所有個人規則都在 settings/main。她在頁面刪掉的截止日或留言，資料庫裡就沒有了；一律以資料庫現況為準，不要加回來。截止日已不存在、日曆上卻還有它的 [Claude安排] 全天活動或專為它排的準備時段時，一併刪除並告訴她。
+1. 讀取 settings/main、courses、recurring、deadlines、inbox（全部留言都要看，handled=false 的要處理）、weeks（本週與下週）。所有個人規則都在 settings/main。她在頁面刪掉的截止日或留言，資料庫裡就沒有了；一律以資料庫現況為準，不要加回來。截止日已不存在、日曆上卻還有它的 [Claude安排] 全天活動或專為它排的準備時段時，一併刪除並告訴她。
 2. 排出下週（週一到週日）的具體時段草稿：先放固定行程、通勤、固定預約；依 settings.priorities 的順序安排；專注工作排在 settings.focusPeak，每天不超過 settings.maxFocusBlocks 段，保留 settings.bufferRatio 的空白；本週沒完成的項目滾到下週。做完就代表某個截止日完成的項目，加上 dls: [deadline id]。
-3. 草稿寫入 weeks/<下週一日期>，status 設為 "draft"。
-4. 用 SendUserMessage 傳給她：若有 settings.semesterStart，開頭寫「下週是學期第 N 週（共 M 週）」；接著一句話總覽、逐日表格、未來 3 週的重大截止日倒數，並只問兩題：「下週有沒有新的作業、截止日、約診或時間不固定的行程？」「上週的預估時間：偏多／剛好／偏少？」
-5. 她確認之前不要寫入日曆。確認後依 settings.calendar 寫入（description 最後一行加 [Claude安排]；全天活動用 Z 結尾的午夜），status 改為 "synced"。
+3. 寫入 weeks/<下週一日期>。settings.weeklyAutoSync 為 true 時：先列出下週已有的 [Claude安排] 活動（已存在的用 update_event，不要重複建立），直接寫入日曆，status 設為 "synced"。否則 status 設為 "draft"。
+4. 用 SendUserMessage 傳給她：若有 settings.semesterStart，開頭寫「下週是學期第 N 週（共 M 週）」；接著一句話總覽、逐日表格、未來 3 週的重大截止日倒數，並只問兩題：「下週有沒有新的作業、截止日、約診或時間不固定的行程？」「上週的預估時間：偏多／剛好／偏少？」weeklyAutoSync 為 true 時，開頭說明已寫進日曆，最後請她要改哪裡直接回覆或寫在「告訴 Claude」。
+5. weeklyAutoSync 不是 true 時，她確認之前不要寫入日曆；確認後依 settings.calendar 寫入（description 最後一行加 [Claude安排]；全天活動用 Z 結尾的午夜），status 改為 "synced"。是 true 時，她回覆的修改直接改進 weeks 和日曆。
 ```
 
 ## 每日檢查
@@ -32,14 +32,18 @@
 
 資料在 {{PAGE_URL}}（用 ArtifactData 讀寫）。時間一律以 {{TZ}} 為準，先用 bash 的 TZ={{TZ}} date 確認現在時間。
 
-1. 讀取 inbox 中 handled=false 的留言，以及本週與下週的 weeks。找出「提前完成」的事項：done=true、沒有 freed=true、排定的結束時間還沒到，且 kind 為 admin、due、read、focus、routine。
-2. 兩者都沒有：什麼都不做、不傳訊息，直接結束。
+1. 讀取 inbox 中 handled=false 的留言、本週與下週的 weeks，並用 list_events（fullText "[Claude安排]"）列出本週與下週的日曆活動。找出：
+   - 「提前完成」的事項：done=true、沒有 freed=true、排定的結束時間還沒到，且 kind 為 admin、due、read、focus、routine。
+   - 「打勾不同步」的事項：done=true 但對應的日曆活動（同一天、同開始時間、標題相同，忽略 ✅ 與 🔴🚗 等前綴）標題還沒有「✅ 」；或 done=false 但日曆標題有 ✅。所有 kind 都算。
+2. 三者都沒有：什麼都不做、不傳訊息，直接結束。
 3. 有的話，讀取 settings/main、courses、recurring、deadlines，然後：
    - 課堂進度變動（提到某門課＋章節、閱讀、停課、補課、考試或繳交日期改變）：更新 courses/<id>.schedule，改過的條目加 updated（今天日期）與 announce（一句話原因），課程設 lastAnnounce；日期有變就同步 deadlines 與日曆；已排好的課前閱讀跟著改。
    - 週期性安排（「每週／每天／每月」「一週 N 次」「以後都」）：寫進 recurring；有固定時間的另建重複日曆活動，只有頻率的排進本週空檔。
-   - 一次性變動：寫進 deadlines 或對應集合；影響本週就直接排進空檔、必要時挪動優先順序較低的事。
-   - 提前完成：日曆活動標題前加「✅ 」並移除提醒；對應截止日設 done=true；把後面還沒做的彈性事項往前挪進空檔（依優先順序、系列照順序、地點合理、不超過每日專注上限），被挪走的原時段留白，不要連鎖補位；處理完設 freed=true。
+   - 一次性變動：寫進 deadlines 或對應集合；影響本週或已排好的下週就直接排進空檔、必要時挪動優先順序較低的事。
+   - 打勾同步：done=true 的在日曆標題前加「✅ 」並移除提醒、對應截止日設 done=true；done=false 但有 ✅ 的拿掉 ✅ 並恢復提醒。這一步不受 confirmBeforeCalendar 影響。
+   - 已預約、時間確定的事（例如「兩週後週五 13:00 剪頭髮已預約」）：即使那一週還沒排，也直接在日曆建活動並更新 recurring.next。
+   - 提前完成：除了上面的打勾同步，把後面還沒做的彈性事項往前挪進空檔（依優先順序、系列照順序、地點合理、不超過每日專注上限），被挪走的原時段留白，不要連鎖補位；處理完設 freed=true。
    - 處理完的留言設 handled=true。她在頁面刪掉的留言不會出現在 inbox，不需要處理。
 4. 規則：只動 description 含 [Claude安排] 的日曆活動；改期用 update_event；時間帶當天正確的時差；所有資料寫入用一次 batch、每筆帶 if_version。settings.confirmBeforeCalendar 為 true 時，先把打算怎麼改傳給她、不要寫入，留言保持 handled=false 並在 note 記「已提案，等確認」（已經有這個 note 的留言不要重複提案）；否則直接改，不需要徵求同意。
-5. 用 SendUserMessage 簡短告訴她做了什麼，一兩句話就好。
+5. 用 SendUserMessage 簡短告訴她改了什麼（幾個短條列就好），打勾同步寫「日曆已標 ✅：＿＿」。
 ```

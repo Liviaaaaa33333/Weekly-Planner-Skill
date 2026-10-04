@@ -26,7 +26,7 @@ Ask them all at once:
 3. What's the earliest time each day I should schedule things, and the latest?
 4. What deadlines, exams, or appointments do you already know about? (List as many as come to mind.)
 
-Use the defaults from `references/data-schema.md` for the other fields: focus blocks in the evening, at most 3 blocks a day, 25–50 minutes each, 30% left free, priority order "admin > deadlines > reading > appointments > errands", weekly check-in Sundays at 20:00, 1 check a day (08:00), and changes made directly with a note afterward. **List these defaults in the confirmation summary and tell the user they can change them anytime** (for example, "I focus better in the morning" or "Ask me before changing my calendar").
+Use the defaults from `references/data-schema.md` for the other fields: focus blocks in the evening, at most 3 blocks a day, 25–50 minutes each, 30% left free, priority order "admin > deadlines > reading > appointments > errands", weekly check-in Sundays at 20:00 (a draft first, written to the calendar after they confirm), 1 check a day (08:00), and mid-week changes made directly with a note afterward. **List these defaults in the confirmation summary and tell the user they can change them anytime** (for example, "I focus better in the morning", "Ask me before changing my calendar", or "Write the weekly plan straight to my calendar, don't wait for me").
 
 If the user uploaded a timetable or syllabus, they're probably a student: work out the start date of week 1 and the number of weeks from the files; if you can't, ask about it in the confirmation summary.
 
@@ -40,6 +40,7 @@ If the `AskUserQuestion` tool is available, use it (multiple choice, with a sugg
 - Where the schedule should go: Google Calendar (on a phone, you can add your Google account to Apple Calendar), or just the page with no calendar.
 - When to check in on next week's schedule each week (Sunday evening recommended).
 - When things change mid-week: make the change and tell you afterward (recommended), or ask you first.
+- Next week's plan: send you a draft to confirm before it goes on the calendar (recommended while you're getting started), or write it straight to the calendar and you say if anything should change (`weeklyAutoSync`).
 
 **Round 2: Time skeleton**
 - Class timetable or fixed schedule (have the user upload a timetable screenshot or syllabus; for working people, a roster or recurring meetings).
