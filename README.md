@@ -68,14 +68,11 @@ demo/                               範例頁面與產生腳本（python3 demo/b
 CHANGELOG.md                        版本紀錄
 ```
 
-### 貢獻
+### 回報問題
 
-歡迎開 Issue 回報問題，或送 Pull Request。回報時請不要貼上個人行程或頁面連結。修改時請：
+使用上遇到問題或有建議，歡迎開 Issue 告訴我，我會再處理與更新。回報時請附上使用的方案和平台（網頁、桌面、手機），以及看到的錯誤訊息，**不要貼上個人行程或頁面連結**。
 
-- 中文版與英文版一起改，頁面範本兩邊保持一致（只有 `<title>` 不同）。
-- 頁面加新文字時，`I18N` 的 `zh` 和 `en` 都要加。
-- 重新打包 `dist/` 的 zip（壓縮整個 `weekly-planner-for-everyone` 資料夾），並更新 CHANGELOG。
-- 確認沒有放入任何人的個人資料。
+這個專案目前不接受 Pull Request，有想法請直接開 Issue 說明。
 
 ### 免責聲明
 
@@ -150,14 +147,11 @@ demo/                               Demo pages and build script (python3 demo/bu
 CHANGELOG.md                        Version history
 ```
 
-### Contributing
+### Reporting issues
 
-Issues and pull requests are welcome. Please don't paste your personal schedule or page link into an issue. When you make changes:
+If something doesn't work or you have a suggestion, please open an Issue and I'll take care of it. Include your plan, the platform you're using (web, desktop, mobile) and any error message you see, but **don't paste your personal schedule or page link**.
 
-- Update both editions, and keep the page template identical in both (only `<title>` differs).
-- Add any new page text to both `zh` and `en` in `I18N`.
-- Rebuild the zips in `dist/` (zip the whole `weekly-planner-for-everyone` folder) and update the CHANGELOG.
-- Make sure no personal data is included.
+This project isn't accepting pull requests at the moment. If you have an idea, please describe it in an Issue instead.
 
 ### Disclaimer
 
