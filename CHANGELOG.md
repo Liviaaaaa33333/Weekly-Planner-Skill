@@ -3,6 +3,12 @@
 格式參考 [Keep a Changelog](https://keepachangelog.com/)，版本號採用 [Semantic Versioning](https://semver.org/)。
 Format based on Keep a Changelog; versions follow Semantic Versioning.
 
+## [1.3.1] - 2026-10-04
+
+### 修正 Fixed
+- 「例行事項」的「下次」日期過了之後不會更新（例如每週一次的事一直顯示上週的日期）。現在每週確認時，會把所有已經過去的「下次」依規則往後推到下一次，不只有需要預約的週期事項。
+  The "Next" date under Routines stayed on past dates (a weekly item kept showing last week). The weekly confirmation now moves every past "Next" date forward by its rule, not only the periodic items that need booking.
+
 ## [1.3.0] - 2026-10-04
 
 ### 新增 Added

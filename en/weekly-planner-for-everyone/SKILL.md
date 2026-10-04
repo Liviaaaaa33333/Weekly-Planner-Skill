@@ -35,15 +35,16 @@ Follow `references/setup.md`: interview, read syllabi, create the page, fill in 
 
 1. Read the data. Non-fixed items in last week's `weeks` with `done: false` roll into next week; don't let them disappear.
 2. Plan next week (rules below) and write it to `weeks/<next Monday>`. When `settings.weeklyAutoSync` is `false` (the default) it is a draft, `status: "draft"`; when it is `true`, write it straight to the calendar (see below) with `status: "synced"`.
-3. Send it to them with `SendUserMessage` (always use it in scheduled tasks, because no one reads the final reply):
+3. **Move routines' next dates forward:** read every `recurring` entry. If `next` is a date earlier than next Monday, advance it by its `rule` to the first occurrence on or after next Monday: a fixed weekday each week → that weekday next week; every N days → keep adding N days until it falls on or after next Monday; a date range each month (for example the 1st–6th) → the first day of the next range; the Nth of each month → the next Nth. If `next` has a note in parentheses (for example "(booked 13:00)") and that occurrence has passed, drop the note. Leave `next` alone when it is blank (no fixed time, or only a frequency) or already falls next week or later. Write these in the same `batch` as step 2. The "Next" date under Routines on the page reads this field, so without this step it keeps showing dates that have passed.
+4. Send it to them with `SendUserMessage` (always use it in scheduled tasks, because no one reads the final reply):
    - If a semester is set, start with "Next week is week N of the semester (of M)"
    - A one-sentence overview (the 1–2 most important things, which day is busiest)
    - A day-by-day table (Time | Item | Category); fixed commitments and commutes can be merged into one row
    - Ask only two questions: **"Any new assignments, deadlines, appointments, or commitments without a fixed time next week?"** and **"Last week's time estimates: too long / about right / too short?"**
    - A countdown of major deadlines in the next 3 weeks
    - When `weeklyAutoSync` is `true`, start by saying it's already in their calendar, and end by telling them to reply or write in Tell Claude if anything should change
-4. **When `weeklyAutoSync` is `false`, don't write to the calendar until they confirm.** If their reply has changes, adjust the draft; after confirmation, write to the calendar and change `status` to `"synced"`. When it is `true`, apply any changes in their reply straight to `weeks` and the calendar (use `update_event` to reschedule) without asking again.
-5. Record the time calibration answer in `settings.calibration`, and adjust future estimates by about 20% accordingly.
+5. **When `weeklyAutoSync` is `false`, don't write to the calendar until they confirm.** If their reply has changes, adjust the draft; after confirmation, write to the calendar and change `status` to `"synced"`. When it is `true`, apply any changes in their reply straight to `weeks` and the calendar (use `update_event` to reschedule) without asking again.
+6. Record the time calibration answer in `settings.calibration`, and adjust future estimates by about 20% accordingly.
 
 When `weeklyAutoSync` is `false` and there is still no reply by the morning of the first day of next week: don't write it yourself. Send one short version listing only the first two days and ask them to confirm.
 
@@ -118,6 +119,7 @@ Read all values from `settings/main`; the values in parentheses are defaults whe
 - Without a fixed time (for example, a class where the next session is booked after each one): always ask for the time during the weekly confirmation; if unknown, don't schedule it yet, and don't guess.
 - Periodic (for example, once every 28 days): calculate from `recurring.next`; if it needs booking, schedule a small "Book X" task `remindBookingDaysBefore` days in advance, and after scheduling update `next` to the following occurrence.
 - With a date range (for example, the 1st–6th of each month): place it in the first convenient slot within the range.
+- Every routine's `next` is moved forward during the weekly confirmation (scenario A, step 3), not only the periodic ones that need booking.
 
 ## Writing to the calendar
 

@@ -1,6 +1,6 @@
 # 週行程排程助理 Weekly Planner Skill
 
-一個給 Claude 用的非官方 skill · An unofficial skill for Claude · v1.3.0
+一個給 Claude 用的非官方 skill · An unofficial skill for Claude · v1.3.1
 
 [中文](#中文) · [English](#english) · [完整教學](docs/guide.md) · [Full guide](docs/guide.en.md)
 
