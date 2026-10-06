@@ -3,6 +3,12 @@
 格式參考 [Keep a Changelog](https://keepachangelog.com/)，版本號採用 [Semantic Versioning](https://semver.org/)。
 Format based on Keep a Changelog; versions follow Semantic Versioning.
 
+## [1.3.2] - 2026-10-06
+
+### 修正 Fixed
+- 「記得帶○○」這類提醒只寫在日曆活動的說明欄，手機通知看不到。現在會在出門前另排一個標題寫著「🎒 帶○○」的提醒，出門的通勤標題也會加上要帶的東西，頁面上可以打勾。
+  Reminders such as "remember to bring X" were only written in the event description, which phone notifications don't show. Now a separate "🎒 Bring X" reminder is scheduled before they leave, the commute title names what to bring, and it can be ticked off on the page.
+
 ## [1.3.1] - 2026-10-04
 
 ### 修正 Fixed
